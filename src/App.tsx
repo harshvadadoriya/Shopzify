@@ -1,7 +1,8 @@
 import './App.css';
 import ColorMode from './colorMode/ColorMode';
-import Banners from './components/gridBanner/Banners';
+import Banner from './components/banner/Banner';
 import Navbar from './components/navbar/Navbar';
+import TopPicks from './components/products/TopPicks';
 import SecondaryNavbar from './components/secondaryNavbar/SecondaryNavbar';
 
 function App() {
@@ -9,7 +10,7 @@ function App() {
 		<>
 			<Navbar />
 			<SecondaryNavbar />
-			<Banners />
+			<TopPicks />
 			<ColorMode />
 		</>
 	);
