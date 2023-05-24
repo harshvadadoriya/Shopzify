@@ -2,41 +2,92 @@ import { NavItem } from '../interfaces/interface';
 
 export const NAV_ITEMS: Array<NavItem> = [
 	{
-		label: 'Fashion',
+		label: 'MEN',
 		children: [
 			{
-				label: 'Explore Design Work',
+				label: 'Topwear',
 				subLabel: 'Trending Design to inspire you',
 				href: '#',
 			},
 			{
-				label: 'New & Noteworthy',
+				label: 'Bottomwear',
+				subLabel: 'Up-and-coming Designers',
+				href: '#',
+			},
+			{
+				label: 'Footwear',
+				subLabel: 'Up-and-coming Designers',
+				href: '#',
+			},
+			{
+				label: 'Fashion Accessories',
 				subLabel: 'Up-and-coming Designers',
 				href: '#',
 			},
 		],
 	},
 	{
-		label: 'Find Work',
+		label: 'WOMEN',
 		children: [
 			{
-				label: 'Job Board',
-				subLabel: 'Find your dream design job',
+				label: 'Indian Wear',
+				subLabel: 'Trending Design to inspire you',
 				href: '#',
 			},
 			{
-				label: 'Freelance Projects',
-				subLabel: 'An exclusive list for contract work',
+				label: 'Watches & Wearables',
+				subLabel: 'Up-and-coming Designers',
+				href: '#',
+			},
+			{
+				label: 'Footwear',
+				subLabel: 'Up-and-coming Designers',
+				href: '#',
+			},
+			{
+				label: 'Jewelry',
+				subLabel: 'Up-and-coming Designers',
 				href: '#',
 			},
 		],
 	},
 	{
-		label: 'Learn Design',
+		label: 'ELECTRONICS',
 		href: '#',
 	},
 	{
-		label: 'Hire Designers',
-		href: '#',
+		label: 'BEAUTY',
+		children: [
+			{
+				label: 'Makeup',
+				subLabel: 'Trending Design to inspire you',
+				href: '#',
+			},
+			{
+				label: 'Haircare',
+				subLabel: 'Up-and-coming Designers',
+				href: '#',
+			},
+			{
+				label: 'Fragrances',
+				subLabel: 'Up-and-coming Designers',
+				href: '#',
+			},
+			{
+				label: 'Appliances',
+				subLabel: 'Up-and-coming Designers',
+				href: '#',
+			},
+		],
+	},
+	{
+		label: 'MORE',
+		children: [
+			{
+				label: 'Home & Living',
+				subLabel: 'Discover Your Perfect Home Décor',
+				href: '#',
+			},
+		],
 	},
 ];

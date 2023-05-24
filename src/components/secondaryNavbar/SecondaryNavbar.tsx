@@ -34,7 +34,8 @@ const SecondaryNavbar = () => {
 	};
 
 	const menuBgColor = useColorModeValue('white', 'gray.700');
-	const inputBg = useColorModeValue('gray.700', 'gray.600');
+	const inputBg = useColorModeValue('none', 'gray.600');
+	const inputColor = useColorModeValue('black', 'white');
 
 	return (
 		<Box flexGrow={1}>
@@ -56,8 +57,8 @@ const SecondaryNavbar = () => {
 						type="text"
 						placeholder="Search Products"
 						borderRadius="md"
-						borderWidth={0}
-						color={'white'}
+						borderWidth={1}
+						color={inputColor}
 						bgColor={inputBg}
 						_focus={{ borderColor: 'transparent' }}
 					/>
