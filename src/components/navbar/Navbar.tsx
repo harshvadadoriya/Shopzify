@@ -14,6 +14,7 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import MobileNav from './MobileNav';
 import DesktopNav from './DesktopNav';
 import { AiFillShop } from 'react-icons/ai';
+import ColorMode from '../../colorMode/ColorMode';
 
 export default function Navbar() {
 	const { isOpen, onToggle } = useDisclosure();
@@ -66,22 +67,9 @@ export default function Navbar() {
 					flex={{ base: 1, md: 0 }}
 					justify={'flex-end'}
 					direction={'row'}
-					spacing={6}
+					spacing={3}
 				>
-					<Button
-						as={'a'}
-						fontSize={'sm'}
-						fontWeight={600}
-						variant={'link'}
-						color={linkColor}
-						marginLeft={'2'}
-						href={'#'}
-						_hover={{
-							color: 'teal.400',
-						}}
-					>
-						Sign In
-					</Button>
+					<ColorMode />
 					<Button
 						as={'a'}
 						fontSize={'sm'}

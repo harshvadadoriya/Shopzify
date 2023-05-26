@@ -12,12 +12,12 @@ const TopPicks = () => {
 				<Text fontSize={25} fontWeight={600} color={'teal.400'}>
 					Top Picks
 				</Text>
-				<div className="flex flex-wrap">
+				<div className="flex flex-wrap justify-center">
 					{TopPicksProductsData.map((obj) => {
 						return (
 							<Box
 								key={obj.id}
-								className="relative max-w-sm min-w-[340px] shadow-md rounded-3xl p-2 mx-2 my-2"
+								className="relative max-w-sm w-[22rem] shadow-md rounded-3xl p-2 mx-2 my-2"
 								border={1}
 								borderStyle="solid"
 								bgColor={cardBgColor}
@@ -52,13 +52,13 @@ const TopPicks = () => {
 										</p>
 										<div className="flex items-center">
 											<Text className="text-lg mt-0" color={priceTextColor}>
-												{Number(obj.productPrice).toLocaleString()}
+												Rs. {Number(obj.productPrice).toLocaleString()}
 											</Text>
 											<Text
 												className="text-md mt-0 ml-2 line-through"
 												color={dummyPriceTextColor}
 											>
-												{Number(obj.productDummyPrice).toLocaleString()}
+												Rs. {Number(obj.productDummyPrice).toLocaleString()}
 											</Text>
 										</div>
 									</div>
