@@ -9,6 +9,7 @@ const MobileNav = () => {
 			p={4}
 			display={{ md: 'none' }}
 			fontWeight={600}
+			userSelect="none"
 		>
 			{NAV_ITEMS.map((navItem) => (
 				<MobileNavItem key={navItem.label} {...navItem} />

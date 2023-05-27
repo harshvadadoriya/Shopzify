@@ -1,17 +1,3 @@
-// import { Box, Image } from '@chakra-ui/react';
-
-// const Banner = () => {
-// 	return (
-// 		<>
-// 			<Box marginX={4} paddingY={2}>
-// 				<Image src={banner1} />
-// 				<Image src={banner2} />
-// 			</Box>
-// 		</>
-// 	);
-// };
-
-// export default Banner;
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { bannerData } from '../../constants/BannerData';
@@ -38,11 +24,12 @@ const responsive = {
 
 const Banner = () => {
 	return (
-		<Box marginX={4} paddingY={4}>
+		<Box marginX={4} paddingY={4} userSelect="none">
 			<Carousel
 				swipeable={false}
 				draggable={false}
-				showDots={false}
+				showDots={true}
+				arrows={false}
 				responsive={responsive}
 				infinite={true}
 				autoPlay={true}
@@ -54,13 +41,7 @@ const Banner = () => {
 				itemClass="carousel-item-padding-40-px"
 			>
 				{bannerData.map((data) => (
-					<Image
-						key={data.id}
-						src={data.bannerImg}
-						alt="banner"
-						h={280}
-						w={'100%'}
-					/>
+					<Image key={data.id} src={data.bannerImg} alt="banner" w="full" />
 				))}
 			</Carousel>
 		</Box>

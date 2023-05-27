@@ -26,7 +26,7 @@ const TopPicks = () => {
 	const dummyPriceTextColor = useColorModeValue('gray.400', 'gray.500');
 	return (
 		<>
-			<Box marginX={4} marginY={1} position="relative">
+			<Box marginX={4} position="relative">
 				<Box
 					fontSize={25}
 					fontWeight={600}
