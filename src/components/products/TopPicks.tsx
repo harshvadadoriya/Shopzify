@@ -1,18 +1,21 @@
-import { Box, Button, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { TopPicksProductsData } from '../../constants/TopPicksProductsData';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { sliderSettings } from '../../utils/sliderSettings';
+import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import 'swiper/css';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
 	return (
-		<Box className="flexCenter">
-			<Button onClick={() => swiper.slidePrev()}>&lt;</Button>
-			<Button onClick={() => swiper.slideNext()} ml="2">
-				&gt;
+		<Flex position="absolute" top="2" right="0" zIndex={1}>
+			<Button onClick={() => swiper.slidePrev()}>
+				<FiChevronLeft />
 			</Button>
-		</Box>
+			<Button onClick={() => swiper.slideNext()} ml="2">
+				<FiChevronRight />
+			</Button>
+		</Flex>
 	);
 };
 
@@ -23,30 +26,39 @@ const TopPicks = () => {
 	const dummyPriceTextColor = useColorModeValue('gray.400', 'gray.500');
 	return (
 		<>
-			<Box marginX={4} paddingY={2} position={'relative'}>
-				<Text
+			<Box marginX={4} marginY={1} position="relative">
+				<Box
 					fontSize={25}
 					fontWeight={600}
-					color={'teal.400'}
-					w={200}
-					bg={'transparent'}
+					color="teal.400"
+					justifyContent="space-between"
+					position="absolute"
+					top={2}
+					left={0}
+					right={0}
+					zIndex={2}
+					pointerEvents="none"
+					userSelect="none"
 				>
-					Top Picks
-				</Text>
-				<Swiper {...sliderSettings}>
-					<SliderButtons />
-					<center>
+					<Text>Top Picks</Text>
+				</Box>
+				<center>
+					<Swiper {...sliderSettings}>
+						<SliderButtons />
 						{TopPicksProductsData.map((obj, i) => (
 							<SwiperSlide key={i}>
 								<Box
 									key={obj.id}
-									className="relative max-w-sm w-[21rem] shadow-md rounded-3xl p-2 my-3 cursor-pointer"
+									className="relative max-w-sm shadow-md rounded-3xl p-2 my-[4rem] cursor-pointer"
 									border={1}
 									borderStyle="solid"
 									bgColor={cardBgColor}
 									borderColor={cardBorderColor}
 								>
-									<div className="overflow-x-hidden rounded-2xl relative">
+									<div
+										className="overflow-x-hidden rounded-2xl relative"
+										style={{ userSelect: 'none' }}
+									>
 										<img
 											className="h-[15rem] rounded-2xl w-full object-cover"
 											src={obj.productImage}
@@ -70,10 +82,16 @@ const TopPicks = () => {
 									</div>
 									<div className="mt-4 pl-2 mb-2 flex justify-between">
 										<div>
-											<p className="text-lg font-semibold text-teal-500 mb-0">
+											<p
+												className="text-lg font-semibold text-teal-500 mb-0 text-left"
+												style={{ userSelect: 'none' }}
+											>
 												{obj.productName}
 											</p>
-											<div className="flex items-center">
+											<div
+												className="flex items-center"
+												style={{ userSelect: 'none' }}
+											>
 												<Text className="text-lg mt-0" color={priceTextColor}>
 													Rs. {Number(obj.productPrice).toLocaleString()}
 												</Text>
@@ -105,8 +123,8 @@ const TopPicks = () => {
 								</Box>
 							</SwiperSlide>
 						))}
-					</center>
-				</Swiper>
+					</Swiper>
+				</center>
 			</Box>
 		</>
 	);

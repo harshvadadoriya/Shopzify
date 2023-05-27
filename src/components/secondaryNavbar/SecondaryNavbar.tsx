@@ -7,32 +7,13 @@ import {
 	InputLeftElement,
 	Menu,
 	MenuButton,
-	MenuItem,
-	MenuList,
 	useColorModeValue,
 } from '@chakra-ui/react';
 import { SearchIcon } from '@chakra-ui/icons';
 import { FaUser } from 'react-icons/fa';
-import { useState } from 'react';
 import { FaShoppingCart, FaRegHeart } from 'react-icons/fa';
 
 const SecondaryNavbar = () => {
-	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-
-	const handleProfileMenuOpen = () => {
-		setIsMenuOpen(true);
-	};
-
-	const handleMobileMenuClose = () => {
-		setIsMobileMenuOpen(false);
-	};
-
-	const handleMenuClose = () => {
-		setIsMenuOpen(false);
-		handleMobileMenuClose();
-	};
-
 	const menuBgColor = useColorModeValue('white', 'gray.700');
 	const inputBg = useColorModeValue('none', 'gray.600');
 	const inputColor = useColorModeValue('black', 'white');
@@ -47,6 +28,7 @@ const SecondaryNavbar = () => {
 				borderBottom={1}
 				borderStyle={'solid'}
 				borderColor={useColorModeValue('gray.200', 'gray.600')}
+				userSelect="none"
 			>
 				<InputGroup maxW="xs">
 					<InputLeftElement
@@ -99,26 +81,12 @@ const SecondaryNavbar = () => {
 							icon={<FaUser />}
 							aria-label="account"
 							color={'white'}
-							onClick={handleProfileMenuOpen}
+							zIndex={1}
 							bgColor={'teal.400'}
 							_hover={{
 								bgColor: 'teal.300',
 							}}
 						/>
-						<MenuList>
-							<MenuItem
-								onClick={handleMenuClose}
-								_hover={{ color: 'teal.400' }}
-							>
-								Profile
-							</MenuItem>
-							<MenuItem
-								onClick={handleMenuClose}
-								_hover={{ color: 'teal.400' }}
-							>
-								My account
-							</MenuItem>
-						</MenuList>
 					</Menu>
 				</Flex>
 			</Flex>

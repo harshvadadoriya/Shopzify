@@ -18,7 +18,6 @@ import ColorMode from '../../colorMode/ColorMode';
 
 export default function Navbar() {
 	const { isOpen, onToggle } = useDisclosure();
-	const linkColor = useColorModeValue('gray.600', 'gray.200');
 
 	return (
 		<Box>
@@ -32,6 +31,7 @@ export default function Navbar() {
 				borderStyle={'solid'}
 				borderColor={useColorModeValue('gray.200', 'gray.600')}
 				align={'center'}
+				userSelect="none"
 			>
 				<Flex ml={{ base: -2 }} display={{ base: 'flex', md: 'none' }}>
 					<IconButton
