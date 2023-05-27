@@ -24,7 +24,7 @@ const responsive = {
 
 const Banner = () => {
 	return (
-		<Box marginX={4} paddingY={4} userSelect="none">
+		<Box marginX={4} paddingY={4} userSelect="none" marginTop={'8.3rem'}>
 			<Carousel
 				swipeable={false}
 				draggable={false}

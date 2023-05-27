@@ -34,7 +34,7 @@ const TopPicks = () => {
 					justifyContent="space-between"
 					position="absolute"
 					top={2}
-					left={0}
+					left={1}
 					right={0}
 					zIndex={2}
 					pointerEvents="none"

@@ -15,12 +15,13 @@ import MobileNav from './MobileNav';
 import DesktopNav from './DesktopNav';
 import { AiFillShop } from 'react-icons/ai';
 import ColorMode from '../../colorMode/ColorMode';
+import SecondaryNavbar from '../secondaryNavbar/SecondaryNavbar';
 
 export default function Navbar() {
 	const { isOpen, onToggle } = useDisclosure();
 
 	return (
-		<Box>
+		<Box position="fixed" top={0} left={0} right={0} zIndex={10}>
 			<Flex
 				bg={useColorModeValue('white', 'gray.700')}
 				color={useColorModeValue('gray.600', 'white')}
@@ -89,6 +90,7 @@ export default function Navbar() {
 			<Collapse in={isOpen} animateOpacity>
 				<MobileNav />
 			</Collapse>
+			<SecondaryNavbar />
 		</Box>
 	);
 }
