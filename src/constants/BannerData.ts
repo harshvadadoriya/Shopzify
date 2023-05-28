@@ -1,5 +1,5 @@
-import banner1 from '/public/banner/cashback-offer-banner.webp';
-import banner2 from '/public/banner/cashback-offer-banner2.webp';
+import banner1 from '/banner/cashback-offer-banner.webp';
+import banner2 from '/banner/cashback-offer-banner2.webp';
 
 export const bannerData = [
 	{
