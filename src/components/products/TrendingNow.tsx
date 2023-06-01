@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 const SliderButtons = () => {
 	const swiper = useSwiper();
 	return (
-		<Flex position="absolute" top="4" right="0" zIndex={1}>
+		<Flex position="absolute" top="5" right="0" zIndex={1}>
 			<Button onClick={() => swiper.slidePrev()}>
 				<FiChevronLeft />
 			</Button>
@@ -22,7 +22,7 @@ const SliderButtons = () => {
 		</Flex>
 	);
 };
-const TopPicks = () => {
+const TrendingNow = () => {
 	const cardBorderColor = useColorModeValue('gray.200', 'gray.600');
 	const cardBgColor = useColorModeValue('white', 'gray.700');
 	const priceTextColor = useColorModeValue('gray.600', 'gray.400');
@@ -42,10 +42,6 @@ const TopPicks = () => {
 		fetchProductData();
 	}, []);
 
-	const TopPicksProducts = productData.filter(
-		(product) => product.displaySection === 'top picks'
-	);
-
 	const [showText, setShowText] = useState(false);
 
 	useEffect(() => {
@@ -63,6 +59,10 @@ const TopPicks = () => {
 		color: textColor,
 	};
 
+	const TopPicksProducts = productData.filter(
+		(product) => product.displaySection === 'trending now'
+	);
+
 	return (
 		<>
 			<Box marginX={4} position="relative">
@@ -73,7 +73,7 @@ const TopPicks = () => {
 					color="teal.400"
 					justifyContent="space-between"
 					position="absolute"
-					top={4}
+					top={5}
 					left={1}
 					right={0}
 					zIndex={2}
@@ -85,7 +85,7 @@ const TopPicks = () => {
 						animate={{ opacity: showText ? 1 : 0 }}
 						transition={{ duration: 0.5 }}
 					>
-						<Text style={textStyles}>TOP PICKS</Text>
+						<Text style={textStyles}>TRENDING</Text>
 					</motion.div>
 				</Box>
 				<center>
@@ -176,4 +176,4 @@ const TopPicks = () => {
 	);
 };
 
-export default TopPicks;
+export default TrendingNow;

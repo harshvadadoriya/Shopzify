@@ -20,8 +20,17 @@ import SecondaryNavbar from '../secondaryNavbar/SecondaryNavbar';
 export default function Navbar() {
 	const { isOpen, onToggle } = useDisclosure();
 
+	// Determine if the navbar should be fixed based on the breakpoint
+	const isNavbarFixed = useBreakpointValue({ base: false, md: true });
+
 	return (
-		<Box position="fixed" top={0} left={0} right={0} zIndex={10}>
+		<Box
+			position={isNavbarFixed ? 'fixed' : 'static'}
+			top={0}
+			left={0}
+			right={0}
+			zIndex={10}
+		>
 			<Flex
 				bg={useColorModeValue('white', 'gray.700')}
 				color={useColorModeValue('gray.600', 'white')}
