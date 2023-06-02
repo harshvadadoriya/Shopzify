@@ -1,13 +1,11 @@
 import { Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
-import { sliderSettings } from '../../utils/sliderSettings';
+import { sliderSettings } from '../../../utils/sliderSettings';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import 'swiper/css';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { ProductFormValues } from '../../interfaces/interface';
-import { API_BASE_URL } from '../../constants/api';
-import { motion } from 'framer-motion';
+import { useGetProductDataQuery } from '../../../redux/apiSlice';
+import { ProductFormValues } from '../../../interfaces/interface';
+import TextTransition from '../TextTransition';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
@@ -22,77 +20,35 @@ const SliderButtons = () => {
 		</Flex>
 	);
 };
-const TrendingNow = () => {
+const FlashSale = () => {
 	const cardBorderColor = useColorModeValue('gray.200', 'gray.600');
 	const cardBgColor = useColorModeValue('white', 'gray.700');
 	const priceTextColor = useColorModeValue('gray.600', 'gray.400');
 	const dummyPriceTextColor = useColorModeValue('gray.400', 'gray.500');
 
-	const [productData, setProductData] = useState<ProductFormValues[]>([]);
-	const fetchProductData = async () => {
-		try {
-			const response = await axios.get(API_BASE_URL);
-			setProductData(response.data.productDetails);
-		} catch (error) {
-			console.error('Error fetching product data:', error);
-		}
-	};
+	const { data, isLoading, isError } = useGetProductDataQuery();
 
-	useEffect(() => {
-		fetchProductData();
-	}, []);
-
-	const [showText, setShowText] = useState(false);
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setShowText((prev) => !prev);
-		}, 1000);
-
-		return () => clearInterval(interval);
-	}, []);
-
-	const textColor = useColorModeValue('teal.400', 'teal.200');
-	const textStyles = {
-		fontSize: '24px',
-		fontWeight: 'bold',
-		color: textColor,
-	};
-
-	const TopPicksProducts = productData.filter(
-		(product) => product.displaySection === 'trending now'
+	const TopPicksProducts = data?.productDetails.filter(
+		(product) => product.displaySection === 'flash sale'
 	);
+
+	if (isLoading) {
+		return <Box marginX={4}>Loading...</Box>;
+	}
+
+	if (isError) {
+		return <Box marginX={4}>Error fetching products</Box>;
+	}
 
 	return (
 		<>
 			<Box marginX={4} position="relative">
-				<Box
-					overflow="hidden"
-					fontSize={25}
-					fontWeight={600}
-					color="teal.400"
-					justifyContent="space-between"
-					position="absolute"
-					top={5}
-					left={1}
-					right={0}
-					zIndex={2}
-					pointerEvents="none"
-					userSelect="none"
-				>
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: showText ? 1 : 0 }}
-						transition={{ duration: 0.5 }}
-					>
-						<Text style={textStyles}>TRENDING</Text>
-					</motion.div>
-				</Box>
+				<TextTransition text="FLASH SALE" />
 				<center>
 					<Swiper {...sliderSettings}>
 						<SliderButtons />
-						{TopPicksProducts.map((obj, i) => (
-							<SwiperSlide key={i}>
+						{TopPicksProducts?.map((obj: ProductFormValues) => (
+							<SwiperSlide key={obj._id}>
 								<Box
 									key={obj._id}
 									className="relative max-w-md rounded-3xl p-2 mt-[5rem] cursor-pointer"
@@ -176,4 +132,4 @@ const TrendingNow = () => {
 	);
 };
 
-export default TrendingNow;
+export default FlashSale;

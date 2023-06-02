@@ -17,7 +17,7 @@ import { AiFillShop } from 'react-icons/ai';
 import ColorMode from '../../colorMode/ColorMode';
 import SecondaryNavbar from '../secondaryNavbar/SecondaryNavbar';
 
-export default function Navbar() {
+const Navbar = () => {
 	const { isOpen, onToggle } = useDisclosure();
 
 	// Determine if the navbar should be fixed based on the breakpoint
@@ -102,4 +102,6 @@ export default function Navbar() {
 			<SecondaryNavbar />
 		</Box>
 	);
-}
+};
+
+export default Navbar;
