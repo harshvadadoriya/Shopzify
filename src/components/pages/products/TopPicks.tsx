@@ -16,7 +16,8 @@ import { useGetProductDataQuery } from '../../../redux/apiSlice';
 import TextTransition from '../TextTransition';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import './WishlistHeartAnimation.css';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
@@ -38,8 +39,8 @@ const TopPicks = () => {
 	const dummyPriceTextColor = useColorModeValue('gray.400', 'gray.500');
 	const navigate = useNavigate();
 
-	const [liked, setLiked] = useState(false);
 	const { data, isLoading, isError } = useGetProductDataQuery();
+	const [wishlistItems, setWishlistItems] = useState<string[]>([]);
 
 	const TopPicksProducts = data?.productDetails.filter(
 		(product) => product.displaySection === 'top picks'
@@ -52,6 +53,26 @@ const TopPicks = () => {
 			behavior: 'smooth',
 		});
 	};
+
+	const [likedProductId, setLikedProductId] = useState('');
+	const handleToggleWishlist = (productId: string) => {
+		const updatedWishlistItems = wishlistItems.includes(productId)
+			? wishlistItems.filter((id) => id !== productId)
+			: [...wishlistItems, productId];
+		setWishlistItems(updatedWishlistItems);
+		localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems));
+
+		setLikedProductId((prevLikedProductId) =>
+			prevLikedProductId === productId ? '' : productId
+		);
+	};
+
+	useEffect(() => {
+		const storedWishlistItems = localStorage.getItem('wishlistItems');
+		if (storedWishlistItems) {
+			setWishlistItems(JSON.parse(storedWishlistItems));
+		}
+	}, []);
 
 	if (isLoading) {
 		return <Box marginX={4}>Loading...</Box>;
@@ -124,12 +145,14 @@ const TopPicks = () => {
 											</div>
 										</div>
 										<Flex
-											onClick={() => setLiked(!liked)}
+											onClick={() => {
+												handleToggleWishlist(obj._id);
+											}}
 											className={`heart-button flex flex-col-reverse mb-1 mr-4 group cursor-pointer ${
-												liked ? 'is-active' : ''
+												wishlistItems.includes(obj._id) ? 'is-active' : ''
 											}`}
 										>
-											{liked ? (
+											{wishlistItems.includes(obj._id) ? (
 												<FaHeart fill="red" fontSize={'20px'} />
 											) : (
 												<FaRegHeart fontSize={'20px'} fill="gray" />

@@ -12,6 +12,7 @@ import {
 import { SearchIcon } from '@chakra-ui/icons';
 import { FaUser } from 'react-icons/fa';
 import { FaShoppingCart, FaRegHeart } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
 
 const SecondaryNavbar = () => {
 	const menuBgColor = useColorModeValue('white', 'gray.700');
@@ -46,20 +47,22 @@ const SecondaryNavbar = () => {
 					/>
 				</InputGroup>
 				<Flex display={'flex'}>
-					<Menu>
-						<MenuButton
-							as={IconButton}
-							size="md"
-							icon={<FaRegHeart />}
-							color={'white'}
-							aria-label="cart"
-							marginLeft={2}
-							bgColor={'teal.400'}
-							_hover={{
-								bgColor: 'teal.300',
-							}}
-						/>
-					</Menu>
+					<NavLink to="/wishlist">
+						<Menu>
+							<MenuButton
+								as={IconButton}
+								size="md"
+								icon={<FaRegHeart />}
+								color={'white'}
+								aria-label="cart"
+								marginLeft={2}
+								bgColor={'teal.400'}
+								_hover={{
+									bgColor: 'teal.300',
+								}}
+							/>
+						</Menu>
+					</NavLink>
 					<Menu>
 						<MenuButton
 							as={IconButton}

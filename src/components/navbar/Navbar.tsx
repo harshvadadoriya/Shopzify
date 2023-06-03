@@ -16,6 +16,7 @@ import DesktopNav from './DesktopNav';
 import { AiFillShop } from 'react-icons/ai';
 import ColorMode from '../../colorMode/ColorMode';
 import SecondaryNavbar from '../secondaryNavbar/SecondaryNavbar';
+import { NavLink } from 'react-router-dom';
 
 const Navbar = () => {
 	const { isOpen, onToggle } = useDisclosure();
@@ -54,19 +55,21 @@ const Navbar = () => {
 					/>
 				</Flex>
 				<Flex flex={{ base: 1 }} justify={{ base: 'start', md: 'start' }}>
-					<Flex display={'flex'} alignItems={'center'}>
-						<Text fontSize={18}>
-							<AiFillShop />
-						</Text>
-						<Text
-							textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
-							fontFamily={'cursive'}
-							color={useColorModeValue('gray.800', 'white')}
-							marginX={1}
-						>
-							Shopzify
-						</Text>
-					</Flex>
+					<NavLink to="/">
+						<Flex display={'flex'} alignItems={'center'}>
+							<Text fontSize={18}>
+								<AiFillShop />
+							</Text>
+							<Text
+								textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
+								fontFamily={'cursive'}
+								color={useColorModeValue('gray.800', 'white')}
+								marginX={1}
+							>
+								Shopzify
+							</Text>
+						</Flex>
+					</NavLink>
 
 					<Flex display={{ base: 'none', md: 'flex' }} ml={10}>
 						<DesktopNav />

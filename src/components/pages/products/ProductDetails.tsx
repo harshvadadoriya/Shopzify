@@ -61,17 +61,28 @@ const ProductDetails = () => {
 								<Heading
 									lineHeight={1.1}
 									fontWeight={600}
+									color={useColorModeValue('teal.400', 'teal.400')}
 									fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}
 								>
 									{productData.name}
 								</Heading>
-								<Text
-									color={useColorModeValue('gray.900', 'gray.400')}
-									fontWeight={300}
-									fontSize={'2xl'}
-								>
-									Rs. {productData.discountedPrice}
-								</Text>
+								<Flex>
+									<Text
+										color={useColorModeValue('gray.600', 'gray.400')}
+										fontWeight={300}
+										fontSize={'2xl'}
+									>
+										Rs. {productData.discountedPrice}
+									</Text>
+									<Text
+										className="line-through ml-2 mt-1"
+										color="gray.500"
+										fontWeight={300}
+										fontSize={'xl'}
+									>
+										Rs. {productData.originalPrice}
+									</Text>
+								</Flex>
 							</Box>
 
 							<Stack
@@ -85,13 +96,16 @@ const ProductDetails = () => {
 							>
 								<VStack spacing={{ base: 4, sm: 6 }}>
 									<Text
-										color={useColorModeValue('gray.500', 'gray.400')}
+										color={useColorModeValue('gray.600', 'gray.400')}
 										fontSize={'2xl'}
 										fontWeight={'300'}
 									>
 										{productData.description}
 									</Text>
-									<Text fontSize={'lg'}>
+									<Text
+										fontSize={'lg'}
+										color={useColorModeValue('gray.600', 'gray.400')}
+									>
 										Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad
 										aliquid amet at delectus doloribus dolorum expedita hic,
 										ipsum maxime modi nam officiis porro, quae, quisquam quos
@@ -101,8 +115,8 @@ const ProductDetails = () => {
 								<Box>
 									<Text
 										fontSize={{ base: '16px', lg: '18px' }}
-										color={useColorModeValue('yellow.500', 'yellow.300')}
-										fontWeight={'500'}
+										color={useColorModeValue('teal.400', 'teal.500')}
+										fontWeight={'600'}
 										textTransform={'uppercase'}
 										mb={'4'}
 									>
@@ -110,13 +124,16 @@ const ProductDetails = () => {
 									</Text>
 
 									<SimpleGrid columns={{ base: 1, md: 2 }} spacing={10}>
-										<List spacing={2}>
+										<List
+											spacing={2}
+											color={useColorModeValue('gray.600', 'gray.400')}
+										>
 											<ListItem>Chronograph</ListItem>
-											<ListItem>Master Chronometer Certified</ListItem>{' '}
+											<ListItem>Master Chronometer Certified</ListItem>
 											<ListItem>Tachymeter</ListItem>
 										</List>
-										<List spacing={2}>
-											<ListItem>Anti‑magnetic</ListItem>
+										<List spacing={2} color="gray.500">
+											<ListItem>Anti-magnetic</ListItem>
 											<ListItem>Chronometer</ListItem>
 											<ListItem>Small seconds</ListItem>
 										</List>
@@ -125,8 +142,8 @@ const ProductDetails = () => {
 								<Box>
 									<Text
 										fontSize={{ base: '16px', lg: '18px' }}
-										color={useColorModeValue('yellow.500', 'yellow.300')}
-										fontWeight={'500'}
+										color={useColorModeValue('teal.400', 'teal.500')}
+										fontWeight={'600'}
 										textTransform={'uppercase'}
 										mb={'4'}
 									>
@@ -135,47 +152,102 @@ const ProductDetails = () => {
 
 									<List spacing={2}>
 										<ListItem>
-											<Text as={'span'} fontWeight={'bold'}>
-												Between lugs:
-											</Text>{' '}
-											20 mm
+											<Flex>
+												<Text
+													as={'span'}
+													fontWeight={600}
+													color={useColorModeValue('gray.600', 'gray.400')}
+												>
+													delectus:
+												</Text>
+												<Text ml={2} color="gray.500">
+													expedita
+												</Text>
+											</Flex>
 										</ListItem>
 										<ListItem>
-											<Text as={'span'} fontWeight={'bold'}>
-												Bracelet:
-											</Text>{' '}
-											leather strap
+											<Flex>
+												<Text
+													as={'span'}
+													fontWeight={600}
+													color={useColorModeValue('gray.600', 'gray.400')}
+												>
+													quisquam quos:
+												</Text>
+												<Text ml={2} color="gray.500">
+													reprehenderit
+												</Text>
+											</Flex>
 										</ListItem>
 										<ListItem>
-											<Text as={'span'} fontWeight={'bold'}>
-												Case:
-											</Text>{' '}
-											Steel
+											<Flex>
+												<Text
+													as={'span'}
+													fontWeight={600}
+													color={useColorModeValue('gray.600', 'gray.400')}
+												>
+													Case:
+												</Text>
+												<Text ml={2} color="gray.500">
+													nam
+												</Text>
+											</Flex>
 										</ListItem>
 										<ListItem>
-											<Text as={'span'} fontWeight={'bold'}>
-												Case diameter:
-											</Text>{' '}
-											42 mm
+											<Flex>
+												<Text
+													as={'span'}
+													fontWeight={600}
+													color={useColorModeValue('gray.600', 'gray.400')}
+												>
+													aliquid amet:
+												</Text>
+												<Text ml={2} color="gray.500">
+													at delectus
+												</Text>
+											</Flex>
 										</ListItem>
 										<ListItem>
-											<Text as={'span'} fontWeight={'bold'}>
-												Dial color:
-											</Text>{' '}
-											Black
+											<Flex>
+												<Text
+													as={'span'}
+													fontWeight={600}
+													color={useColorModeValue('gray.600', 'gray.400')}
+												>
+													doloribus dolorum:
+												</Text>
+												<Text ml={2} color="gray.500">
+													expedita hic
+												</Text>
+											</Flex>
 										</ListItem>
 										<ListItem>
-											<Text as={'span'} fontWeight={'bold'}>
-												Crystal:
-											</Text>{' '}
-											Domed, scratch‑resistant sapphire crystal with
-											anti‑reflective treatment inside
+											<Flex>
+												<Text
+													as={'span'}
+													fontWeight={600}
+													color={useColorModeValue('gray.600', 'gray.400')}
+												>
+													Crystal:
+												</Text>
+												<Text ml={2} color="gray.500">
+													Domed sapphire
+												</Text>
+											</Flex>
 										</ListItem>
 										<ListItem>
-											<Text as={'span'} fontWeight={'bold'}>
-												Water resistance:
-											</Text>{' '}
-											5 bar (50 metres / 167 feet){' '}
+											<Flex>
+												<Text
+													as={'span'}
+													fontWeight={600}
+													color={useColorModeValue('gray.600', 'gray.400')}
+												>
+													adipisicing:
+												</Text>
+												<Text ml={2} color="gray.500">
+													modi nam
+												</Text>
+											</Flex>
 										</ListItem>
 									</List>
 								</Box>
@@ -203,6 +275,7 @@ const ProductDetails = () => {
 								direction="row"
 								alignItems="center"
 								justifyContent={'center'}
+								color={useColorModeValue('gray.600', 'gray.400')}
 							>
 								<MdLocalShipping />
 								<Text>2-3 business days delivery</Text>

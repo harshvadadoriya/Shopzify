@@ -8,6 +8,9 @@ const LazyHome = lazy(() => import('./components/pages/Home'));
 const LazyProductDetails = lazy(
 	() => import('./components/pages/products/ProductDetails')
 );
+const LazyWishlist = lazy(
+	() => import('./components/pages/products/WishlistItem')
+);
 
 const router = createBrowserRouter([
 	{
@@ -27,6 +30,14 @@ const router = createBrowserRouter([
 				element: (
 					<Suspense fallback={<LazySuspense />}>
 						<LazyProductDetails />
+					</Suspense>
+				),
+			},
+			{
+				path: '/wishlist',
+				element: (
+					<Suspense fallback={<LazySuspense />}>
+						<LazyWishlist />
 					</Suspense>
 				),
 			},
