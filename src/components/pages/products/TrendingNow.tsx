@@ -1,13 +1,21 @@
-import { Box, Button, Flex, Text, useColorModeValue } from '@chakra-ui/react';
+import {
+	Badge,
+	Box,
+	Button,
+	Flex,
+	Text,
+	useColorModeValue,
+} from '@chakra-ui/react';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { sliderSettings } from '../../../utils/sliderSettings';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import 'swiper/css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ProductFormValues } from '../../../interfaces/interface';
-import { motion } from 'framer-motion';
 import { useGetProductDataQuery } from '../../../redux/apiSlice';
 import TextTransition from '../TextTransition';
+import { useNavigate } from 'react-router-dom';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
@@ -27,6 +35,17 @@ const TrendingNow = () => {
 	const cardBgColor = useColorModeValue('white', 'gray.700');
 	const priceTextColor = useColorModeValue('gray.600', 'gray.400');
 	const dummyPriceTextColor = useColorModeValue('gray.400', 'gray.500');
+	const navigate = useNavigate();
+
+	const [liked, setLiked] = useState(false);
+
+	const handleProductClick = (product: ProductFormValues) => {
+		navigate(`/products/${product._id}`, { state: { product } });
+		window.scrollTo({
+			top: 0,
+			behavior: 'smooth',
+		});
+	};
 
 	const { data, isLoading, isError } = useGetProductDataQuery();
 
@@ -53,36 +72,33 @@ const TrendingNow = () => {
 							<SwiperSlide key={obj._id}>
 								<Box
 									key={obj._id}
-									className="relative max-w-md rounded-3xl p-2 mt-[5rem] cursor-pointer"
+									className="relative max-w-md rounded-3xl p-2 mt-[5rem]"
 									border={1}
 									borderStyle="solid"
 									bgColor={cardBgColor}
 									borderColor={cardBorderColor}
 								>
 									<div
-										className="overflow-x-hidden rounded-2xl relative"
+										className="overflow-x-hidden rounded-2xl relative cursor-pointer"
 										style={{ userSelect: 'none' }}
+										onClick={() => handleProductClick(obj)}
 									>
 										<img
 											className="h-[15rem] rounded-2xl w-full object-cover"
 											src={obj.image}
 										/>
-										<p className="absolute right-2 top-2 bg-white rounded-full p-2 cursor-pointer group">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												className="h-6 w-6 group-hover:opacity-50 opacity-70"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="black"
+										<Box className="absolute left-2 top-1 rounded-full">
+											<Badge
+												rounded="full"
+												px="2"
+												fontSize="0.8em"
+												colorScheme="red"
+												color="red.500"
+												bgColor="red.100"
 											>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													strokeWidth="1.5"
-													d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-												/>
-											</svg>
-										</p>
+												New
+											</Badge>
+										</Box>
 									</div>
 									<div className="mt-4 pl-2 mb-2 flex justify-between">
 										<div>
@@ -107,22 +123,18 @@ const TrendingNow = () => {
 												</Text>
 											</div>
 										</div>
-										<div className="flex flex-col-reverse mb-1 mr-4 group cursor-pointer">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												className="h-6 w-6 group-hover:opacity-70"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke="gray"
-											>
-												<path
-													strokeLinecap="round"
-													strokeLinejoin="round"
-													strokeWidth="2"
-													d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-												/>
-											</svg>
-										</div>
+										<Flex
+											onClick={() => setLiked(!liked)}
+											className={`heart-button flex flex-col-reverse mb-1 mr-4 group cursor-pointer ${
+												liked ? 'is-active' : ''
+											}`}
+										>
+											{liked ? (
+												<FaHeart fill="red" fontSize={'20px'} />
+											) : (
+												<FaRegHeart fontSize={'20px'} fill="gray" />
+											)}
+										</Flex>
 									</div>
 								</Box>
 							</SwiperSlide>
