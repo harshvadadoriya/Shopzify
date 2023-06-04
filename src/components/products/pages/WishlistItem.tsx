@@ -61,14 +61,8 @@ const WishlistItem = () => {
 		if (wishlistItems.includes(productId)) {
 			toast({
 				title: 'Product removed from wishlist',
-				status: 'info',
-				duration: 1500,
-				isClosable: true,
-			});
-		} else {
-			toast({
-				title: 'Product added in your wishlist',
-				status: 'success',
+				status: 'warning',
+				position: 'top',
 				duration: 1500,
 				isClosable: true,
 			});
@@ -91,7 +85,13 @@ const WishlistItem = () => {
 		<>
 			<Box marginX={4} marginTop={isScreenFixed ? '8.3rem' : '0'}>
 				<Center>
-					<Text fontWeight="bold" fontSize="3xl" my={2} mt={'2.5rem'}>
+					<Text
+						fontWeight="bold"
+						fontSize="3xl"
+						my={2}
+						mt={'2.5rem'}
+						textAlign="center"
+					>
 						Your Wishlist Products
 					</Text>
 				</Center>

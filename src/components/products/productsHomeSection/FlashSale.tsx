@@ -69,7 +69,7 @@ const FlashSale = () => {
 		if (wishlistItems.includes(productId)) {
 			toast({
 				title: 'Product removed from wishlist',
-				status: 'info',
+				status: 'warning',
 				position: 'top',
 				duration: 1500,
 				isClosable: true,

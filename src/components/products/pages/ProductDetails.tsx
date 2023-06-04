@@ -16,8 +16,9 @@ import {
 	VisuallyHidden,
 	List,
 	ListItem,
+	IconButton,
 } from '@chakra-ui/react';
-import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import { ProductFormValues } from '../../../interfaces/interface';
 import { useLocation } from 'react-router-dom';
@@ -252,7 +253,6 @@ const ProductDetails = () => {
 									</List>
 								</Box>
 							</Stack>
-
 							<Button
 								rounded={'md'}
 								w={'full'}
@@ -268,7 +268,8 @@ const ProductDetails = () => {
 									boxShadow: 'lg',
 								}}
 							>
-								Add to cart
+								<FaShoppingCart />
+								<Text ml={2}>Add to cart</Text>
 							</Button>
 
 							<Stack

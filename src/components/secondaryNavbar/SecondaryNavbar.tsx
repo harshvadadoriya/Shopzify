@@ -50,9 +50,8 @@ const SecondaryNavbar = () => {
 					<NavLink to="/wishlist">
 						<Menu>
 							<MenuButton
-								as={IconButton}
-								size="md"
-								icon={<FaRegHeart />}
+								boxSize={10}
+								borderRadius={5}
 								color={'white'}
 								aria-label="cart"
 								marginLeft={2}
@@ -60,15 +59,16 @@ const SecondaryNavbar = () => {
 								_hover={{
 									bgColor: 'teal.300',
 								}}
-							/>
+							>
+								<FaRegHeart className="ml-[0.7rem]" />
+							</MenuButton>
 						</Menu>
 					</NavLink>
 					<NavLink to="/cart">
 						<Menu>
 							<MenuButton
-								as={IconButton}
-								size="md"
-								icon={<FaShoppingCart />}
+								boxSize={10}
+								borderRadius={5}
 								color={'white'}
 								aria-label="cart"
 								marginX={2}
@@ -76,14 +76,15 @@ const SecondaryNavbar = () => {
 								_hover={{
 									bgColor: 'teal.300',
 								}}
-							/>
+							>
+								<FaShoppingCart className="ml-[0.7rem]" />
+							</MenuButton>
 						</Menu>
 					</NavLink>
 					<Menu>
 						<MenuButton
-							as={IconButton}
-							size="md"
-							icon={<FaUser />}
+							boxSize={10}
+							borderRadius={5}
 							aria-label="account"
 							color={'white'}
 							zIndex={1}
@@ -91,7 +92,9 @@ const SecondaryNavbar = () => {
 							_hover={{
 								bgColor: 'teal.300',
 							}}
-						/>
+						>
+							<FaUser className="ml-[0.7rem]" />
+						</MenuButton>
 					</Menu>
 				</Flex>
 			</Flex>
