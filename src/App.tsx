@@ -6,10 +6,13 @@ const LazyRoot = lazy(() => import('./components/pages/RootComponent'));
 const LazySuspense = lazy(() => import('./components/pages/SuspenseLoading'));
 const LazyHome = lazy(() => import('./components/pages/Home'));
 const LazyProductDetails = lazy(
-	() => import('./components/pages/products/ProductDetails')
+	() => import('./components/products/pages/ProductDetails')
 );
 const LazyWishlist = lazy(
-	() => import('./components/pages/products/WishlistItem')
+	() => import('./components/products/pages/WishlistItem')
+);
+const LazyCartCheckout = lazy(
+	() => import('./components/products/pages/CartCheckout')
 );
 
 const router = createBrowserRouter([
@@ -38,6 +41,14 @@ const router = createBrowserRouter([
 				element: (
 					<Suspense fallback={<LazySuspense />}>
 						<LazyWishlist />
+					</Suspense>
+				),
+			},
+			{
+				path: '/cart',
+				element: (
+					<Suspense fallback={<LazySuspense />}>
+						<LazyCartCheckout />
 					</Suspense>
 				),
 			},

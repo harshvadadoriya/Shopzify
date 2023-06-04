@@ -6,6 +6,7 @@ import {
 	Image,
 	Text,
 	useColorModeValue,
+	useToast,
 } from '@chakra-ui/react';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { sliderSettings } from '../../../utils/sliderSettings';
@@ -13,11 +14,11 @@ import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import 'swiper/css';
 import { ProductFormValues } from '../../../interfaces/interface';
 import { useGetProductDataQuery } from '../../../redux/apiSlice';
-import TextTransition from '../TextTransition';
+import TextTransition from '../utils/TextTransition';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
-import './WishlistHeartAnimation.css';
+import '../utils/WishlistHeartAnimation.css';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
@@ -38,6 +39,7 @@ const TopPicks = () => {
 	const priceTextColor = useColorModeValue('gray.600', 'gray.400');
 	const dummyPriceTextColor = useColorModeValue('gray.400', 'gray.500');
 	const navigate = useNavigate();
+	const toast = useToast();
 
 	const { data, isLoading, isError } = useGetProductDataQuery();
 	const [wishlistItems, setWishlistItems] = useState<string[]>([]);
@@ -65,6 +67,24 @@ const TopPicks = () => {
 		setLikedProductId((prevLikedProductId) =>
 			prevLikedProductId === productId ? '' : productId
 		);
+
+		if (wishlistItems.includes(productId)) {
+			toast({
+				title: 'Product removed from wishlist',
+				status: 'info',
+				position: 'top',
+				duration: 1500,
+				isClosable: true,
+			});
+		} else {
+			toast({
+				title: 'Product added in your wishlist',
+				status: 'success',
+				position: 'top',
+				duration: 1500,
+				isClosable: true,
+			});
+		}
 	};
 
 	useEffect(() => {
@@ -148,12 +168,12 @@ const TopPicks = () => {
 											onClick={() => {
 												handleToggleWishlist(obj._id);
 											}}
-											className={`heart-button flex flex-col-reverse mb-1 mr-4 group cursor-pointer ${
+											className={`heart-button flex flex-col-reverse mt-[1.8rem] mr-4 group cursor-pointer h-5 ${
 												wishlistItems.includes(obj._id) ? 'is-active' : ''
 											}`}
 										>
 											{wishlistItems.includes(obj._id) ? (
-												<FaHeart fill="red" fontSize={'20px'} />
+												<FaHeart fill="teal" fontSize={'20px'} />
 											) : (
 												<FaRegHeart fontSize={'20px'} fill="gray" />
 											)}

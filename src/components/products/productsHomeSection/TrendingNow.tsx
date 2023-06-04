@@ -5,15 +5,16 @@ import {
 	Flex,
 	Text,
 	useColorModeValue,
+	useToast,
 } from '@chakra-ui/react';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { sliderSettings } from '../../../utils/sliderSettings';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import 'swiper/css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ProductFormValues } from '../../../interfaces/interface';
 import { useGetProductDataQuery } from '../../../redux/apiSlice';
-import TextTransition from '../TextTransition';
+import TextTransition from '../utils/TextTransition';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 
@@ -37,7 +38,14 @@ const TrendingNow = () => {
 	const dummyPriceTextColor = useColorModeValue('gray.400', 'gray.500');
 	const navigate = useNavigate();
 
-	const [liked, setLiked] = useState(false);
+	const toast = useToast();
+
+	const { data, isLoading, isError } = useGetProductDataQuery();
+	const [wishlistItems, setWishlistItems] = useState<string[]>([]);
+
+	const TopPicksProducts = data?.productDetails.filter(
+		(product) => product.displaySection === 'trending now'
+	);
 
 	const handleProductClick = (product: ProductFormValues) => {
 		navigate(`/products/${product._id}`, { state: { product } });
@@ -47,11 +55,43 @@ const TrendingNow = () => {
 		});
 	};
 
-	const { data, isLoading, isError } = useGetProductDataQuery();
+	const [likedProductId, setLikedProductId] = useState('');
+	const handleToggleWishlist = (productId: string) => {
+		const updatedWishlistItems = wishlistItems.includes(productId)
+			? wishlistItems.filter((id) => id !== productId)
+			: [...wishlistItems, productId];
+		setWishlistItems(updatedWishlistItems);
+		localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems));
 
-	const TopPicksProducts = data?.productDetails.filter(
-		(product) => product.displaySection === 'trending now'
-	);
+		setLikedProductId((prevLikedProductId) =>
+			prevLikedProductId === productId ? '' : productId
+		);
+
+		if (wishlistItems.includes(productId)) {
+			toast({
+				title: 'Product removed from wishlist',
+				status: 'info',
+				position: 'top',
+				duration: 1500,
+				isClosable: true,
+			});
+		} else {
+			toast({
+				title: 'Product added in your wishlist',
+				status: 'success',
+				position: 'top',
+				duration: 1500,
+				isClosable: true,
+			});
+		}
+	};
+
+	useEffect(() => {
+		const storedWishlistItems = localStorage.getItem('wishlistItems');
+		if (storedWishlistItems) {
+			setWishlistItems(JSON.parse(storedWishlistItems));
+		}
+	}, []);
 
 	if (isLoading) {
 		return <Box marginX={4}>Loading...</Box>;
@@ -64,7 +104,7 @@ const TrendingNow = () => {
 	return (
 		<>
 			<Box marginX={4} position="relative">
-				<TextTransition text="TRENDING" />
+				<TextTransition text="TOP PICKS" />
 				<center>
 					<Swiper {...sliderSettings}>
 						<SliderButtons />
@@ -124,13 +164,15 @@ const TrendingNow = () => {
 											</div>
 										</div>
 										<Flex
-											onClick={() => setLiked(!liked)}
-											className={`heart-button flex flex-col-reverse mb-1 mr-4 group cursor-pointer ${
-												liked ? 'is-active' : ''
+											onClick={() => {
+												handleToggleWishlist(obj._id);
+											}}
+											className={`heart-button flex flex-col-reverse mt-[1.8rem] mr-4 group cursor-pointer h-5 ${
+												wishlistItems.includes(obj._id) ? 'is-active' : ''
 											}`}
 										>
-											{liked ? (
-												<FaHeart fill="red" fontSize={'20px'} />
+											{wishlistItems.includes(obj._id) ? (
+												<FaHeart fill="teal" fontSize={'20px'} />
 											) : (
 												<FaRegHeart fontSize={'20px'} fill="gray" />
 											)}

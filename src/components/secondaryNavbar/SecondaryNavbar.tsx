@@ -63,20 +63,22 @@ const SecondaryNavbar = () => {
 							/>
 						</Menu>
 					</NavLink>
-					<Menu>
-						<MenuButton
-							as={IconButton}
-							size="md"
-							icon={<FaShoppingCart />}
-							color={'white'}
-							aria-label="cart"
-							marginX={2}
-							bgColor={'teal.400'}
-							_hover={{
-								bgColor: 'teal.300',
-							}}
-						/>
-					</Menu>
+					<NavLink to="/cart">
+						<Menu>
+							<MenuButton
+								as={IconButton}
+								size="md"
+								icon={<FaShoppingCart />}
+								color={'white'}
+								aria-label="cart"
+								marginX={2}
+								bgColor={'teal.400'}
+								_hover={{
+									bgColor: 'teal.300',
+								}}
+							/>
+						</Menu>
+					</NavLink>
 					<Menu>
 						<MenuButton
 							as={IconButton}
