@@ -83,19 +83,19 @@ const Navbar = () => {
 					spacing={3}
 				>
 					<ColorMode />
-					<Button
-						as={'a'}
-						fontSize={'sm'}
-						fontWeight={600}
-						color={'white'}
-						bg={'teal.400'}
-						href={'#'}
-						_hover={{
-							bg: 'teal.300',
-						}}
-					>
-						Sign Up
-					</Button>
+					<NavLink to="/signup">
+						<Button
+							fontSize={'sm'}
+							fontWeight={600}
+							color={'white'}
+							bg={'teal.400'}
+							_hover={{
+								bg: 'teal.300',
+							}}
+						>
+							Sign Up
+						</Button>
+					</NavLink>
 				</Stack>
 			</Flex>
 

@@ -3,6 +3,7 @@ import { Autoplay } from 'swiper';
 import { Image, Box, useBreakpointValue } from '@chakra-ui/react';
 import 'swiper/css';
 import { BannerData } from '../../constants/BannerData';
+import { useEffect } from 'react';
 
 const Banner = () => {
 	const isScreenFixed = useBreakpointValue({ base: false, md: true });
