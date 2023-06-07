@@ -7,6 +7,8 @@ import {
 	RefreshResponse,
 	RefreshCredentials,
 } from '../../interfaces/interface';
+import { token } from '../authSliceRedux/authSlice';
+import { store } from '../store';
 
 const environment = import.meta.env;
 
@@ -18,6 +20,7 @@ export const api = createApi({
 		prepareHeaders: (headers) => {
 			headers.set('Content-type', 'application/json');
 			headers.set('Accept', 'application/json');
+			headers.set('Authorization', `Bearer ${token(store.getState())}`);
 			return headers;
 		},
 	}),
