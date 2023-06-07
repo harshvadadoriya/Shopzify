@@ -4,20 +4,21 @@ import FormikControl from "../../formik/FormikControl";
 import {
   Box,
   Button,
-  Center,
   Flex,
   Text,
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
 import { UserRegAuthFormValues } from "../../../interfaces/interface";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AiFillShop } from "react-icons/ai";
+import { useSignupMutation } from "../../../redux/apiSliceRedux/apiSlice";
 
 const Signup = () => {
   const toast = useToast();
   const submitMenuBgColor = useColorModeValue("teal.400", "teal.600");
   const resetMenuBgColor = useColorModeValue("red.400", "red.600");
+  const navigate = useNavigate();
 
   const initialValue: UserRegAuthFormValues = {
     name: "",
@@ -47,18 +48,44 @@ const Signup = () => {
       .oneOf([Yup.ref("password"), ""], "Passwords does not match")
       .required("Confirm Password is required"),
   });
-  const onSubmit = async (
-    values: UserRegAuthFormValues,
-    onSubmitProps: FormikHelpers<UserRegAuthFormValues>
-  ) => {
-    onSubmitProps.resetForm();
-    console.log(values);
-    toast({
-      title: "You have successfully logged in",
-      position: "top",
-      status: "success",
-      isClosable: true,
-    });
+
+  const [SigninUser, { isSuccess, isError, error }] = useSignupMutation();
+
+  const onSubmit = async (values: UserRegAuthFormValues) => {
+    try {
+      await SigninUser({
+        email: values.email,
+        name: values.name,
+        password: values.password,
+        phone: values.phone,
+      }).unwrap();
+      navigate("/login");
+      toast({
+        title: "Account created",
+        description: "Please login to continue shopping",
+        position: "top",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (err: any) {
+      console.log(err);
+      if (err.data.message) {
+        toast({
+          title: err.data.message,
+          description: "Please try to register with other email",
+          position: "top",
+          status: "error",
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "oops, please try again!",
+          position: "top",
+          status: "error",
+          isClosable: true,
+        });
+      }
+    }
   };
 
   return (

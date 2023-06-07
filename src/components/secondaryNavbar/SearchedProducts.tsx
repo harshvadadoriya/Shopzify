@@ -9,12 +9,13 @@ import {
   useColorModeValue,
   useToast,
 } from "@chakra-ui/react";
-import { useGetProductDataQuery } from "../../../redux/apiSliceRedux/apiSlice";
-import { ProductFormValues } from "../../../interfaces/interface";
+
 import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useGetProductDataQuery } from "../../redux/apiSliceRedux/apiSlice";
+import { ProductFormValues } from "../../interfaces/interface";
 
-const WishlistItem = () => {
+const SearchedProducts = () => {
   const cardBorderColor = useColorModeValue("gray.200", "gray.600");
   const cardBgColor = useColorModeValue("white", "gray.700");
   const priceTextColor = useColorModeValue("gray.600", "gray.400");
@@ -92,7 +93,7 @@ const WishlistItem = () => {
             mt={"2.5rem"}
             textAlign="center"
           >
-            Your Wishlist Products
+            Your Search result includes
           </Text>
         </Center>
         {wishlistProducts?.length === 0 ? (
@@ -200,4 +201,4 @@ const WishlistItem = () => {
   );
 };
 
-export default WishlistItem;
+export default SearchedProducts;

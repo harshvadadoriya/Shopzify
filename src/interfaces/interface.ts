@@ -39,3 +39,38 @@ export type UserLoginAuthFormValues = Pick<
   UserRegAuthFormValues,
   "email" | "password"
 >;
+
+export interface AuthState {
+  isLoggedIn: boolean;
+}
+
+// interfaces for authentication API responses
+export interface LoginResponse {
+  // Example:
+  token: string;
+  // userId: string;
+  // ...
+}
+
+export interface RefreshResponse {
+  token: string;
+  // ...
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+  // ...
+}
+
+export interface SignupCredentials {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  // ...
+}
+
+export interface RefreshCredentials {
+  refreshToken: string;
+}

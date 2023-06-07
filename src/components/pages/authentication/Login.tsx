@@ -1,4 +1,4 @@
-import { Formik, Form, FormikHelpers } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import FormikControl from "../../formik/FormikControl";
 import {
@@ -10,13 +10,18 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { UserLoginAuthFormValues } from "../../../interfaces/interface";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AiFillShop } from "react-icons/ai";
+import { useAppDispatch } from "../../../redux/store";
+import { setLoggedIn } from "../../../redux/authSliceRedux/authSlice";
+import { useLoginMutation } from "../../../redux/apiSliceRedux/apiSlice";
 
 const Login = () => {
   const toast = useToast();
   const submitMenuBgColor = useColorModeValue("teal.400", "teal.600");
   const resetMenuBgColor = useColorModeValue("red.400", "red.600");
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const initialValue: UserLoginAuthFormValues = {
     email: "",
@@ -32,18 +37,41 @@ const Login = () => {
       .min(8, "Password must be 8 characters long")
       .required("Password is required"),
   });
-  const onSubmit = async (
-    values: UserLoginAuthFormValues,
-    onSubmitProps: FormikHelpers<UserLoginAuthFormValues>
-  ) => {
-    onSubmitProps.resetForm();
-    console.log(values);
-    toast({
-      title: "You have successfully signed in",
-      position: "top",
-      status: "success",
-      isClosable: true,
-    });
+
+  // Use the login mutation from the RTK Query API slice
+  const [loginUser, { data, isError, isSuccess }] = useLoginMutation();
+
+  const onSubmit = async (values: UserLoginAuthFormValues) => {
+    try {
+      await loginUser({
+        email: values.email,
+        password: values.password,
+      }).unwrap();
+      navigate("/");
+      dispatch(setLoggedIn());
+      toast({
+        title: "You have successfully logged in",
+        position: "top",
+        status: "success",
+        isClosable: true,
+      });
+    } catch (err: any) {
+      if (err.data.message) {
+        toast({
+          title: err.data.message,
+          position: "top",
+          status: "error",
+          isClosable: true,
+        });
+      } else {
+        toast({
+          title: "oops, please try again!",
+          position: "top",
+          status: "error",
+          isClosable: true,
+        });
+      }
+    }
   };
 
   return (

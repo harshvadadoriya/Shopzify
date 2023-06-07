@@ -13,7 +13,7 @@ import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import "swiper/css";
 import { useEffect, useState } from "react";
 import { ProductFormValues } from "../../../interfaces/interface";
-import { useGetProductDataQuery } from "../../../redux/apiSlice";
+import { useGetProductDataQuery } from "../../../redux/apiSliceRedux/apiSlice";
 import TextTransition from "../utils/TextTransition";
 import { useNavigate } from "react-router-dom";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
@@ -49,10 +49,6 @@ const TrendingNow = () => {
 
   const handleProductClick = (product: ProductFormValues) => {
     navigate(`/products/${product._id}`, { state: { product } });
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
   };
 
   const [likedProductId, setLikedProductId] = useState("");

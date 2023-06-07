@@ -19,6 +19,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { MdLocalShipping } from "react-icons/md";
 import { ProductFormValues } from "../../../interfaces/interface";
 import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const ProductDetails = () => {
   const { state } = useLocation();
@@ -30,6 +31,13 @@ const ProductDetails = () => {
   const titleTextColor = useColorModeValue("teal.400", "teal.500");
   const buttonBgColor = useColorModeValue("teal.600", "teal.500");
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, []);
+
   if (!productData) {
     return (
       <>
@@ -40,7 +48,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      <Box marginTop={isScreenFixed ? "8.3rem" : "0"}>
+      <Box marginTop={isScreenFixed ? "8.3rem" : "0"} userSelect="none">
         <Container maxW={"7xl"}>
           <SimpleGrid
             columns={{ base: 1, lg: 2 }}

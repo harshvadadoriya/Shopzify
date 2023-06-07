@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { sliderSettings } from "../../../utils/sliderSettings";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import "swiper/css";
-import { useGetProductDataQuery } from "../../../redux/apiSlice";
+import { useGetProductDataQuery } from "../../../redux/apiSliceRedux/apiSlice";
 import { ProductFormValues } from "../../../interfaces/interface";
 import TextTransition from "../utils/TextTransition";
 import { useNavigate } from "react-router-dom";
@@ -103,7 +103,7 @@ const FlashSale = () => {
   return (
     <>
       <Box marginX={4} position="relative">
-        <TextTransition text="FLASH SALE" />
+        <TextTransition text="FLASH SALE  " />
         <center>
           <Swiper {...sliderSettings}>
             <SliderButtons />
