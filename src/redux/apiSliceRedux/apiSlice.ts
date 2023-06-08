@@ -6,9 +6,10 @@ import {
 	SignupCredentials,
 	RefreshResponse,
 	RefreshCredentials,
+	ProductFormValues,
+	WishlistResponse,
 } from '../../interfaces/interface';
-import { token } from '../authSliceRedux/authSlice';
-import { store } from '../store';
+import { RootState } from '../store';
 
 const environment = import.meta.env;
 
@@ -17,10 +18,13 @@ export const api = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: environment.VITE_API_BASE_URL,
 		credentials: 'include',
-		prepareHeaders: (headers) => {
-			headers.set('Content-type', 'application/json');
-			headers.set('Accept', 'application/json');
-			headers.set('Authorization', `Bearer ${token(store.getState())}`);
+		prepareHeaders: (headers, { getState }) => {
+			const token = (getState() as RootState).auth.accessToken;
+			if (token) {
+				headers.set('Content-type', 'application/json');
+				headers.set('Accept', 'application/json');
+				headers.set('authorization', `Bearer ${token}`);
+			}
 			return headers;
 		},
 	}),
@@ -31,6 +35,16 @@ export const api = createApi({
 		}),
 		searchProducts: builder.query<ProductResponse, string>({
 			query: (searchTerm) => `/product/search/${searchTerm}`,
+		}),
+		addToWishlist: builder.mutation<void, { product: ProductFormValues }>({
+			query: ({ product }) => ({
+				url: `/user-wishlist/wishlist/toggle`,
+				method: 'POST',
+				body: { product },
+			}),
+		}),
+		getWishlists: builder.query<WishlistResponse, void>({
+			query: () => '/user-wishlist/wishlists',
 		}),
 		login: builder.mutation<LoginResponse, LoginCredentials>({
 			query: (credentials) => ({
@@ -65,6 +79,8 @@ export const api = createApi({
 export const {
 	useGetProductDataQuery,
 	useSearchProductsQuery,
+	useAddToWishlistMutation,
+	useGetWishlistsQuery,
 	useLoginMutation,
 	useSignupMutation,
 	useRefreshMutation,

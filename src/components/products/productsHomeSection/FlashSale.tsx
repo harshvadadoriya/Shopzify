@@ -11,17 +11,19 @@ import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { sliderSettings } from "../../../utils/sliderSettings";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import "swiper/css";
-import { useGetProductDataQuery } from "../../../redux/apiSliceRedux/apiSlice";
 import { ProductFormValues } from "../../../interfaces/interface";
+import { useGetProductDataQuery } from "../../../redux/apiSliceRedux/apiSlice";
 import TextTransition from "../utils/TextTransition";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { useState, useEffect } from "react";
+import "../utils/WishlistHeartAnimation.css";
+import { useAddToWishlistMutation } from "../../../redux/apiSliceRedux/apiSlice";
 
 const SliderButtons = () => {
   const swiper = useSwiper();
   return (
-    <Flex position="absolute" top="5" right="0" zIndex={1}>
+    <Flex position="absolute" top="4" right="0" zIndex={1}>
       <Button onClick={() => swiper.slidePrev()}>
         <FiChevronLeft />
       </Button>
@@ -31,66 +33,69 @@ const SliderButtons = () => {
     </Flex>
   );
 };
+
 const FlashSale = () => {
   const cardBorderColor = useColorModeValue("gray.200", "gray.600");
   const cardBgColor = useColorModeValue("white", "gray.700");
   const priceTextColor = useColorModeValue("gray.600", "gray.400");
   const dummyPriceTextColor = useColorModeValue("gray.400", "gray.500");
-  const navigate = useNavigate();
   const toast = useToast();
+  const navigate = useNavigate();
 
   const { data, isLoading, isError } = useGetProductDataQuery();
-  const [wishlistItems, setWishlistItems] = useState<string[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<ProductFormValues[]>([]);
 
   const TopPicksProducts = data?.productDetails.filter(
     (product) => product.displaySection === "flash sale"
   );
 
+  const [addToWishlist, { isLoading: isAddingToWishlist }] =
+    useAddToWishlistMutation();
+
+  const handleToggleWishlist = (product: ProductFormValues) => {
+    const updatedWishlistItems = wishlistItems.some(
+      (item) => item._id === product._id
+    )
+      ? wishlistItems.filter((item) => item._id !== product._id)
+      : [...wishlistItems, product];
+    setWishlistItems(updatedWishlistItems);
+
+    addToWishlist({ product })
+      .unwrap()
+      .then(() => {
+        if (updatedWishlistItems.some((item) => item._id === product._id)) {
+          toast({
+            title: "Product added to wishlist",
+            status: "success",
+            position: "top",
+            duration: 2000,
+            isClosable: true,
+          });
+        } else {
+          toast({
+            title: "Product removed from wishlist",
+            status: "warning",
+            position: "top",
+            duration: 2000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: "Error",
+          description: "Something went wrong",
+          status: "error",
+          position: "top",
+          duration: 2000,
+          isClosable: true,
+        });
+      });
+  };
+
   const handleProductClick = (product: ProductFormValues) => {
     navigate(`/products/${product._id}`, { state: { product } });
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
   };
-
-  const [likedProductId, setLikedProductId] = useState("");
-  const handleToggleWishlist = (productId: string) => {
-    const updatedWishlistItems = wishlistItems.includes(productId)
-      ? wishlistItems.filter((id) => id !== productId)
-      : [...wishlistItems, productId];
-    setWishlistItems(updatedWishlistItems);
-    localStorage.setItem("wishlistItems", JSON.stringify(updatedWishlistItems));
-
-    setLikedProductId((prevLikedProductId) =>
-      prevLikedProductId === productId ? "" : productId
-    );
-
-    if (wishlistItems.includes(productId)) {
-      toast({
-        title: "Product removed from wishlist",
-        status: "warning",
-        position: "top",
-        duration: 1500,
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: "Product added in your wishlist",
-        status: "success",
-        position: "top",
-        duration: 1500,
-        isClosable: true,
-      });
-    }
-  };
-
-  useEffect(() => {
-    const storedWishlistItems = localStorage.getItem("wishlistItems");
-    if (storedWishlistItems) {
-      setWishlistItems(JSON.parse(storedWishlistItems));
-    }
-  }, []);
 
   if (isLoading) {
     return <Box marginX={4}>Loading...</Box>;
@@ -103,7 +108,7 @@ const FlashSale = () => {
   return (
     <>
       <Box marginX={4} position="relative">
-        <TextTransition text="FLASH SALE  " />
+        <TextTransition text="FLASH SALE" />
         <center>
           <Swiper {...sliderSettings}>
             <SliderButtons />
@@ -164,13 +169,13 @@ const FlashSale = () => {
                     </div>
                     <Flex
                       onClick={() => {
-                        handleToggleWishlist(obj._id);
+                        handleToggleWishlist(obj);
                       }}
                       className={`heart-button flex flex-col-reverse mt-[1.8rem] mr-4 group cursor-pointer h-5 ${
-                        wishlistItems.includes(obj._id) ? "is-active" : ""
+                        wishlistItems.includes(obj) ? "is-active" : ""
                       }`}
                     >
-                      {wishlistItems.includes(obj._id) ? (
+                      {wishlistItems.includes(obj) ? (
                         <FaHeart fill="teal" fontSize={"20px"} />
                       ) : (
                         <FaRegHeart fontSize={"20px"} fill="gray" />

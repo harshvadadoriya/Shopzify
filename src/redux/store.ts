@@ -1,16 +1,46 @@
-import { configureStore } from '@reduxjs/toolkit';
+import {
+	combineReducers,
+	configureStore,
+	createStore,
+	getDefaultMiddleware,
+} from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query/react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { api } from './apiSliceRedux/apiSlice';
 import authReducer from './authSliceRedux/authSlice';
+import {
+	persistReducer,
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import persistStore from 'redux-persist/es/persistStore';
+
+const persistConfig = {
+	key: 'root',
+	version: 1,
+	storage: storage,
+};
+
+const reducer = combineReducers({
+	auth: authReducer.reducer,
+	[api.reducerPath]: api.reducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, reducer);
 
 export const store = configureStore({
-	reducer: {
-		auth: authReducer.reducer,
-		[api.reducerPath]: api.reducer,
-	},
+	reducer: persistedReducer,
 	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware().concat(api.middleware),
+		getDefaultMiddleware({
+			serializableCheck: {
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+			},
+		}).concat(api.middleware),
 });
 
 setupListeners(store.dispatch);
