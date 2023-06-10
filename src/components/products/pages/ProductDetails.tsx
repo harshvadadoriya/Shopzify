@@ -14,13 +14,20 @@ import {
 	useColorModeValue,
 	List,
 	ListItem,
+	useToast,
 } from '@chakra-ui/react';
 import { FaShoppingCart } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
-import { ProductFormValues } from '../../../interfaces/interface';
-import { useLocation } from 'react-router-dom';
+import {
+	ProductFormValues,
+	ProductResponse,
+} from '../../../interfaces/interface';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAddToCartMutation } from '../../../redux/apiSliceRedux/apiSlice';
+import {
+	useAddToCartMutation,
+	useGetCartProductsQuery,
+} from '../../../redux/apiSliceRedux/apiSlice';
 
 const ProductDetails = () => {
 	const { state } = useLocation();
@@ -33,14 +40,40 @@ const ProductDetails = () => {
 	const buttonBgColor = useColorModeValue('teal.600', 'teal.500');
 
 	const [addToCart, { isLoading }] = useAddToCartMutation();
+	const toast = useToast();
 
 	const handleAddToCart = async (product: ProductFormValues) => {
 		try {
-			await addToCart(product).unwrap();
-			console.log('Product added to cart successfully');
+			await addToCart({ product });
+			toast({
+				title: 'Product added to your cart',
+				status: 'success',
+				position: 'top',
+				duration: 2000,
+				isClosable: true,
+			});
 		} catch (error) {
-			console.log(error);
+			toast({
+				title: 'Error',
+				description: 'Something went wrong',
+				status: 'error',
+				position: 'top',
+				duration: 2000,
+				isClosable: true,
+			});
 		}
+	};
+
+	const navigate = useNavigate();
+	const { data: cartProducts, refetch } = useGetCartProductsQuery();
+
+	const isProductAddedToCart = () => {
+		if (cartProducts) {
+			return cartProducts.cart.products.some(
+				(item) => item._id === productData?._id
+			);
+		}
+		return false;
 	};
 
 	useEffect(() => {
@@ -239,7 +272,7 @@ const ProductDetails = () => {
 								color={'white'}
 								textTransform={'uppercase'}
 								onClick={() => handleAddToCart(productData)}
-								disabled={isLoading}
+								disabled={isProductAddedToCart()}
 								_hover={{
 									transform: 'translateY(2px)',
 									boxShadow: 'lg',
@@ -247,7 +280,11 @@ const ProductDetails = () => {
 							>
 								<FaShoppingCart />
 								<Text ml={2}>
-									{isLoading ? 'Adding to Cart...' : 'Add to Cart'}
+									{isLoading
+										? 'Adding to Cart'
+										: isProductAddedToCart()
+										? 'Go to Cart'
+										: 'Add to Cart'}
 								</Text>
 							</Button>
 
