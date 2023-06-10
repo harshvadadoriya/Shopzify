@@ -14,9 +14,8 @@ import {
 	useGetProductDataQuery,
 	useGetWishlistsQuery,
 } from '../../../redux/apiSliceRedux/apiSlice';
-import { ProductFormValues } from '../../../interfaces/interface';
 import { useNavigate } from 'react-router-dom';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaTimes } from 'react-icons/fa';
 
 const WishlistItem = () => {
 	const cardBorderColor = useColorModeValue('gray.200', 'gray.600');
@@ -27,25 +26,12 @@ const WishlistItem = () => {
 	const toast = useToast();
 
 	const { data: wishlistData, refetch } = useGetWishlistsQuery();
-	console.log(wishlistData?.wishlist.products);
 
 	useEffect(() => {
 		refetch();
 	}, [refetch]);
 
-	const [wishlistItems, setWishlistItems] = useState<string[]>([]);
 	const navigate = useNavigate();
-
-	useEffect(() => {
-		const storedWishlistItems = localStorage.getItem('wishlistItems');
-		const initialWishlistItems = storedWishlistItems
-			? JSON.parse(storedWishlistItems)
-			: [];
-		setWishlistItems(initialWishlistItems);
-		if (storedWishlistItems) {
-			setWishlistItems(JSON.parse(storedWishlistItems));
-		}
-	}, []);
 
 	const handleProductClick = (productId: string) => {
 		navigate(`/products/${productId}`);
@@ -53,24 +39,6 @@ const WishlistItem = () => {
 			top: 0,
 			behavior: 'smooth',
 		});
-	};
-
-	const handleToggleWishlist = (productId: string) => {
-		const updatedWishlistItems = wishlistItems.includes(productId)
-			? wishlistItems.filter((id) => id !== productId)
-			: [...wishlistItems, productId];
-		setWishlistItems(updatedWishlistItems);
-		localStorage.setItem('wishlistItems', JSON.stringify(updatedWishlistItems));
-
-		if (wishlistItems.includes(productId)) {
-			toast({
-				title: 'Product removed from wishlist',
-				status: 'warning',
-				position: 'top',
-				duration: 1500,
-				isClosable: true,
-			});
-		}
 	};
 
 	return (
@@ -173,9 +141,12 @@ const WishlistItem = () => {
 											</Text>
 										</div>
 									</div>
-									<Flex
+									<Button variant="ghost" size="sm" colorScheme="red">
+										<FaTimes />
+									</Button>
+									{/* <Flex
 										onClick={() => {
-											handleToggleWishlist(wishlistProduct._id);
+											handleToggleWishlist(wishlisedddtProduct._id);
 										}}
 										className={`heart-button flex flex-col-reverse mb-1 mr-4 group cursor-pointer ${
 											wishlistItems.includes(wishlistProduct._id)
@@ -188,7 +159,7 @@ const WishlistItem = () => {
 										) : (
 											<FaRegHeart fontSize={'20px'} fill="gray" />
 										)}
-									</Flex>
+									</Flex> */}
 								</div>
 							</Box>
 						))}
