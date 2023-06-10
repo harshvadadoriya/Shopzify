@@ -1,4 +1,5 @@
 import {
+  Center,
   IconButton,
   Input,
   InputGroup,
@@ -8,25 +9,32 @@ import {
 import React, { useState } from "react";
 import { SearchIcon } from "@chakra-ui/icons";
 import { useSearchProductsQuery } from "../../redux/apiSliceRedux/apiSlice";
-import { Navigate, useNavigate } from "react-router-dom";
-import SearchedProducts from "./SearchedProducts";
-import { ProductFormValues } from "../../interfaces/interface";
+import { useNavigate } from "react-router-dom";
 
 const SearchProduct = () => {
   const inputBg = useColorModeValue("none", "gray.600");
   const inputColor = useColorModeValue("black", "white");
   const [searchInput, setSearchInput] = useState<string>("");
+  const [isSearchRequested, setIsSearchRequested] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const { data } = useSearchProductsQuery(searchInput);
+  const { data } = useSearchProductsQuery(searchInput, {
+    skip: !isSearchRequested,
+  });
 
   const handleSearch = () => {
+    setIsSearchRequested(true);
     if (data) {
       navigate("/search-products", { state: { data } });
     } else {
       navigate("/search-products", { state: { data: [] } });
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+    setIsSearchRequested(false);
   };
 
   return (
@@ -44,7 +52,7 @@ const SearchProduct = () => {
           color={inputColor}
           bgColor={inputBg}
           _focus={{ borderColor: "transparent" }}
-          onChange={(e) => setSearchInput(e.target.value)}
+          onChange={handleInputChange}
         />
         <IconButton
           aria-label="Search database"

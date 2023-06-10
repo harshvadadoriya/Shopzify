@@ -1,5 +1,6 @@
 import { Box, Center, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+import CheckoutPage from "./shoppingCart/CheckoutPage";
 
 const CartCheckout = () => {
   const isScreenFixed = useBreakpointValue({ base: false, md: true });
@@ -9,13 +10,13 @@ const CartCheckout = () => {
   return (
     <>
       <Box marginX={4} marginTop={isScreenFixed ? "8.3rem" : "0"}>
-        <Center>
+        {/* <Center>
           <Text fontWeight="bold" fontSize="3xl" my={2} mt={"2.5rem"}>
             Shopping Bag
           </Text>
-        </Center>
+        </Center> */}
 
-        <Center flexDirection="column" mt={8}>
+        {/* <Center flexDirection="column" mt={8}>
           <Text fontSize="lg" fontWeight="bold">
             Hey, it feels so light!
           </Text>
@@ -32,8 +33,9 @@ const CartCheckout = () => {
               </Text>
             </Text>
           </Flex>
-        </Center>
+        </Center> */}
       </Box>
+      <CheckoutPage />
     </>
   );
 };
