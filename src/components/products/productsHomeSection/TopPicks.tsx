@@ -42,7 +42,11 @@ const TopPicks = () => {
 	const toast = useToast();
 	const navigate = useNavigate();
 
-	const { data, isLoading, isError } = useGetProductDataQuery();
+	const { data, isLoading, isError, refetch } = useGetProductDataQuery();
+	useEffect(() => {
+		refetch();
+	}, [refetch]);
+
 	const [wishlistItems, setWishlistItems] = useState<ProductFormValues[]>([]);
 
 	const TopPicksProducts = data?.productDetails.filter(
