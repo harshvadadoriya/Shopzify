@@ -19,7 +19,6 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import '../utils/WishlistHeartAnimation.css';
 import { useAddToWishlistMutation } from '../../../redux/apiSliceRedux/apiSlice';
-import useWishlist from '../../../customHooks/useWishlist';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
@@ -44,45 +43,27 @@ const TrendingNow = () => {
 	const navigate = useNavigate();
 
 	const { data, isLoading, isError } = useGetProductDataQuery();
-	const { wishlistItems, addToWishlist, removeFromWishlist, isInWishlist } =
-		useWishlist('trendingNowWishlist');
+	const [wishlistItems, setWishlistItems] = useState<ProductFormValues[]>([]);
 
 	const TopPicksProducts = data?.productDetails.filter(
 		(product) => product.displaySection === 'trending now'
 	);
 
-	const [addToWishlistApi, { isLoading: isAddingToWishlist }] =
+	const [addToWishlist, { isLoading: isAddingToWishlist }] =
 		useAddToWishlistMutation();
 
 	const handleToggleWishlist = (product: ProductFormValues) => {
-		if (isInWishlist(product._id)) {
-			removeFromWishlist(product._id);
-			addToWishlistApi({ product })
-				.unwrap()
-				.then(() => {
-					toast({
-						title: 'Product removed from wishlist',
-						status: 'warning',
-						position: 'top',
-						duration: 2000,
-						isClosable: true,
-					});
-				})
-				.catch((error) => {
-					toast({
-						title: 'Error',
-						description: 'Something went wrong',
-						status: 'error',
-						position: 'top',
-						duration: 2000,
-						isClosable: true,
-					});
-				});
-		} else {
-			addToWishlist(product._id);
-			addToWishlistApi({ product })
-				.unwrap()
-				.then(() => {
+		const updatedWishlistItems = wishlistItems.some(
+			(item) => item._id === product._id
+		)
+			? wishlistItems.filter((item) => item._id !== product._id)
+			: [...wishlistItems, product];
+		setWishlistItems(updatedWishlistItems);
+
+		addToWishlist({ product })
+			.unwrap()
+			.then(() => {
+				if (updatedWishlistItems.some((item) => item._id === product._id)) {
 					toast({
 						title: 'Product added to wishlist',
 						status: 'success',
@@ -90,18 +71,26 @@ const TrendingNow = () => {
 						duration: 2000,
 						isClosable: true,
 					});
-				})
-				.catch((error) => {
+				} else {
 					toast({
-						title: 'Error',
-						description: 'Something went wrong',
-						status: 'error',
+						title: 'Product removed from wishlist',
+						status: 'warning',
 						position: 'top',
 						duration: 2000,
 						isClosable: true,
 					});
+				}
+			})
+			.catch((error) => {
+				toast({
+					title: 'Error',
+					description: 'Something went wrong',
+					status: 'error',
+					position: 'top',
+					duration: 2000,
+					isClosable: true,
 				});
-		}
+			});
 	};
 
 	const handleProductClick = (product: ProductFormValues) => {
@@ -183,10 +172,10 @@ const TrendingNow = () => {
 												handleToggleWishlist(obj);
 											}}
 											className={`heart-button flex flex-col-reverse mt-[1.8rem] mr-4 group cursor-pointer h-5 ${
-												wishlistItems.includes(obj._id) ? 'is-active' : ''
+												wishlistItems.includes(obj) ? 'is-active' : ''
 											}`}
 										>
-											{wishlistItems.includes(obj._id) ? (
+											{wishlistItems.includes(obj) ? (
 												<FaHeart fill="teal" fontSize={'20px'} />
 											) : (
 												<FaRegHeart fontSize={'20px'} fill="gray" />

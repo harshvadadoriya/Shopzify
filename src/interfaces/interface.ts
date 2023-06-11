@@ -112,10 +112,10 @@ export interface Wishlist {
 	products: WishlistProduct[];
 }
 
-export interface wishlistRecord {
+export interface WishlistRecord {
 	wishlist: Wishlist;
 }
 
-export interface cartRecord {
+export interface CartRecord {
 	cart: Wishlist;
 }

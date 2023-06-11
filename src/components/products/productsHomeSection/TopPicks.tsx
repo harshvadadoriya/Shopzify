@@ -12,15 +12,13 @@ import { sliderSettings } from '../../../utils/sliderSettings';
 import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import 'swiper/css';
 import { ProductFormValues } from '../../../interfaces/interface';
-import {
-	useGetProductDataQuery,
-	useAddToWishlistMutation,
-} from '../../../redux/apiSliceRedux/apiSlice';
+import { useGetProductDataQuery } from '../../../redux/apiSliceRedux/apiSlice';
 import TextTransition from '../utils/TextTransition';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
 import '../utils/WishlistHeartAnimation.css';
-import useWishlist from '../../../customHooks/useWishlist';
+import { useAddToWishlistMutation } from '../../../redux/apiSliceRedux/apiSlice';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
@@ -45,45 +43,27 @@ const TopPicks = () => {
 	const navigate = useNavigate();
 
 	const { data, isLoading, isError } = useGetProductDataQuery();
-	const { wishlistItems, addToWishlist, removeFromWishlist, isInWishlist } =
-		useWishlist('topPicksWishlist');
+	const [wishlistItems, setWishlistItems] = useState<ProductFormValues[]>([]);
 
 	const TopPicksProducts = data?.productDetails.filter(
 		(product) => product.displaySection === 'top picks'
 	);
 
-	const [addToWishlistApi, { isLoading: isAddingToWishlist }] =
+	const [addToWishlist, { isLoading: isAddingToWishlist }] =
 		useAddToWishlistMutation();
 
 	const handleToggleWishlist = (product: ProductFormValues) => {
-		if (isInWishlist(product._id)) {
-			removeFromWishlist(product._id);
-			addToWishlistApi({ product })
-				.unwrap()
-				.then(() => {
-					toast({
-						title: 'Product removed from wishlist',
-						status: 'warning',
-						position: 'top',
-						duration: 2000,
-						isClosable: true,
-					});
-				})
-				.catch((error) => {
-					toast({
-						title: 'Error',
-						description: 'Something went wrong',
-						status: 'error',
-						position: 'top',
-						duration: 2000,
-						isClosable: true,
-					});
-				});
-		} else {
-			addToWishlist(product._id);
-			addToWishlistApi({ product })
-				.unwrap()
-				.then(() => {
+		const updatedWishlistItems = wishlistItems.some(
+			(item) => item._id === product._id
+		)
+			? wishlistItems.filter((item) => item._id !== product._id)
+			: [...wishlistItems, product];
+		setWishlistItems(updatedWishlistItems);
+
+		addToWishlist({ product })
+			.unwrap()
+			.then(() => {
+				if (updatedWishlistItems.some((item) => item._id === product._id)) {
 					toast({
 						title: 'Product added to wishlist',
 						status: 'success',
@@ -91,18 +71,26 @@ const TopPicks = () => {
 						duration: 2000,
 						isClosable: true,
 					});
-				})
-				.catch((error) => {
+				} else {
 					toast({
-						title: 'Error',
-						description: 'Something went wrong',
-						status: 'error',
+						title: 'Product removed from wishlist',
+						status: 'warning',
 						position: 'top',
 						duration: 2000,
 						isClosable: true,
 					});
+				}
+			})
+			.catch((error) => {
+				toast({
+					title: 'Error',
+					description: 'Something went wrong',
+					status: 'error',
+					position: 'top',
+					duration: 2000,
+					isClosable: true,
 				});
-		}
+			});
 	};
 
 	const handleProductClick = (product: ProductFormValues) => {
@@ -179,16 +167,15 @@ const TopPicks = () => {
 												</Text>
 											</div>
 										</div>
-
 										<Flex
 											onClick={() => {
 												handleToggleWishlist(obj);
 											}}
 											className={`heart-button flex flex-col-reverse mt-[1.8rem] mr-4 group cursor-pointer h-5 ${
-												isInWishlist(obj._id) ? 'is-active' : ''
+												wishlistItems.includes(obj) ? 'is-active' : ''
 											}`}
 										>
-											{isInWishlist(obj._id) ? (
+											{wishlistItems.includes(obj) ? (
 												<FaHeart fill="teal" fontSize={'20px'} />
 											) : (
 												<FaRegHeart fontSize={'20px'} fill="gray" />

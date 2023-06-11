@@ -7,9 +7,9 @@ import {
 	RefreshResponse,
 	RefreshCredentials,
 	ProductFormValues,
-	wishlistRecord,
+	WishlistRecord,
 	WishlistProduct,
-	cartRecord,
+	CartRecord,
 } from '../../interfaces/interface';
 import { RootState } from '../store';
 
@@ -45,7 +45,7 @@ export const api = createApi({
 				body: { product },
 			}),
 		}),
-		getWishlists: builder.query<wishlistRecord, void>({
+		getWishlists: builder.query<WishlistRecord, void>({
 			query: () => '/user-wishlist/wishlists',
 		}),
 		addToCart: builder.mutation<void, { product: ProductFormValues }>({
@@ -55,7 +55,7 @@ export const api = createApi({
 				body: { product },
 			}),
 		}),
-		getCartProducts: builder.query<cartRecord, void>({
+		getCartProducts: builder.query<CartRecord, void>({
 			query: () => '/user-cart/carts',
 		}),
 		login: builder.mutation<LoginResponse, LoginCredentials>({
