@@ -8,8 +8,8 @@ import {
 import { ReactNode } from "react";
 
 interface PriceTagProps {
-  currency: string;
-  price: number;
+  currency?: string;
+  price: string;
   salePrice?: number;
   rootProps?: StackProps;
   priceProps?: TextProps;
@@ -37,7 +37,7 @@ export const PriceTag = (props: PriceTagProps) => {
   return (
     <HStack spacing="1" {...rootProps}>
       <Price isOnSale={!!salePrice} textProps={priceProps}>
-        {formatPrice(price, { currency })}
+        {formatPrice(price)}
       </Price>
       {salePrice && (
         <SalePrice {...salePriceProps}>

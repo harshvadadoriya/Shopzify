@@ -12,8 +12,10 @@ import { NavLink } from "react-router-dom";
 import { CartItem } from "./CartItem";
 import { CartOrderSummary } from "./CartOrderSummary";
 import { cartData } from "../../../../constants/_data";
+import { useGetCartProductsQuery } from "../../../../redux/apiSliceRedux/apiSlice";
 
 const CheckoutPage = () => {
+  const { data: cartData } = useGetCartProductsQuery();
   return (
     <>
       <Box
@@ -34,22 +36,22 @@ const CheckoutPage = () => {
             </Heading>
 
             <Stack spacing="6">
-              {cartData.map((item) => (
-                <CartItem key={item.id} {...item} />
+              {cartData?.cart.products.map((item) => (
+                <CartItem key={item._id} {...item} />
               ))}
             </Stack>
           </Stack>
 
           <Flex direction="column" align="center" flex="1">
             <CartOrderSummary />
-            <HStack mt="6" fontWeight="semibold">
+            {/* <HStack mt="6" fontWeight="semibold">
               <p>or</p>
               <NavLink to="/">
                 <Text color={mode("teal.500", "teal.400")}>
                   Continue shopping
                 </Text>
               </NavLink>
-            </HStack>
+            </HStack> */}
           </Flex>
         </Stack>
       </Box>
