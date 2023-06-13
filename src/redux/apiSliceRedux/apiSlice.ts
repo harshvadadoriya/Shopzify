@@ -38,11 +38,14 @@ export const api = createApi({
     searchProducts: builder.query<ProductResponse, string>({
       query: (searchTerm) => `/product/search/${searchTerm}`,
     }),
-    addToWishlist: builder.mutation<void, { product: ProductFormValues }>({
-      query: ({ product }) => ({
+    addToWishlist: builder.mutation<
+      void,
+      { product: ProductFormValues; isWishList?: boolean }
+    >({
+      query: ({ product, isWishList }) => ({
         url: `/user-wishlist/wishlist/toggle`,
         method: "POST",
-        body: { product },
+        body: { product, isWishList },
       }),
       invalidatesTags: ["Wishlist"],
     }),

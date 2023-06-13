@@ -94,6 +94,7 @@ export interface RefreshCredentials {
 export interface WishlistProduct {
   _id: string;
   product: string;
+  productId: string;
   category: string;
   description: string;
   discountedPrice: string;
