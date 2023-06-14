@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Flex,
   Menu,
@@ -8,10 +9,12 @@ import {
 import { FaUser } from "react-icons/fa";
 import { FaShoppingCart, FaRegHeart } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { useGetCartProductsQuery } from "../../redux/apiSliceRedux/apiSlice";
 import SearchProduct from "./SearchProduct";
 
 const SecondaryNavbar = () => {
   const menuBgColor = useColorModeValue("white", "gray.700");
+  const { data: cartData } = useGetCartProductsQuery();
 
   return (
     <Box flexGrow={1}>
@@ -46,6 +49,17 @@ const SecondaryNavbar = () => {
           </NavLink>
           <NavLink to="/cart">
             <Menu>
+              <Badge
+                className="absolute ml-8 mt-[-7px] flex text-center"
+                colorScheme={"teal"}
+                bgColor="gray.100"
+                borderWidth={"1px"}
+                color={"teal.600"}
+                boxSize={5}
+                borderRadius={50}
+              >
+                {cartData?.cart.products.length ?? 0}
+              </Badge>
               <MenuButton
                 boxSize={10}
                 borderRadius={5}

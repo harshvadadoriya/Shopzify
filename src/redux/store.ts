@@ -13,6 +13,7 @@ import {
   REGISTER,
 } from "redux-persist";
 import sessionStorage from "redux-persist/es/storage/session";
+import checkoutReducer from "./checkoutSliceRedux/checkoutSlice";
 
 const persistConfig = {
   key: "root",
@@ -21,8 +22,9 @@ const persistConfig = {
 };
 
 const reducer = combineReducers({
-  auth: authReducer.reducer,
   [api.reducerPath]: api.reducer,
+  auth: authReducer.reducer,
+  checkout: checkoutReducer.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducer);
