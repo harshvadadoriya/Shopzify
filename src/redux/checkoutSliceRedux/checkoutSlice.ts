@@ -1,70 +1,58 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  useAddToCartMutation,
-  useRemoveFromCartMutation,
-} from "../apiSliceRedux/apiSlice";
-import { RootState } from "../store";
-
-export interface CartProduct {
-  productId: string;
-  quantity: number;
-  price: number;
-}
-
-export interface CartItemProps {
-  item: {
-    productId: string;
-    discountedPrice: number;
-    cartQty?: number;
-  };
-  onQuantityChange: (productId: string, newQuantity: number) => void;
-}
-
-interface CheckoutState {
-  cartItems: CartProduct[];
-  subtotal: number;
-}
+	useAddToCartMutation,
+	useRemoveFromCartMutation,
+} from '../apiSliceRedux/apiSlice';
+import { RootState } from '../store';
+import { CheckoutState, CartProduct } from '../../interfaces/interface';
 
 const initialState: CheckoutState = {
-  cartItems: [],
-  subtotal: 0,
+	cartItems: [],
+	subtotal: 0,
 };
 
 const checkoutSlice = createSlice({
-  name: "checkout",
-  initialState,
-  reducers: {
-    updateCartItemQuantity: (
-      state,
-      action: PayloadAction<{
-        productId: string;
-        quantity: number;
-        price: number;
-      }>
-    ) => {
-      const { productId, quantity, price } = action.payload;
-      const existingItem = state.cartItems.find(
-        (item) => item.productId === productId
-      );
-      if (existingItem) {
-        existingItem.quantity = quantity;
-        existingItem.price = price;
-      } else {
-        state.cartItems.push({ productId, quantity, price: 0 });
-      }
-    },
-    calculateSubtotal: (state) => {
-      state.subtotal = state.cartItems.reduce(
-        (total, item) => total + item.price * item.quantity,
-        0
-      );
-    },
-    resetCheckout: () => initialState,
-  },
+	name: 'checkout',
+	initialState,
+	reducers: {
+		updateCartItemQuantity: (
+			state,
+			action: PayloadAction<{
+				productId: string;
+				quantity: number;
+				price: number;
+			}>
+		) => {
+			const { productId, quantity, price } = action.payload;
+			const existingItem = state.cartItems.find(
+				(item) => item.productId === productId
+			);
+			if (existingItem) {
+				existingItem.quantity = quantity;
+				existingItem.price = price;
+			} else {
+				state.cartItems.push({ productId, quantity, price: 0 });
+			}
+		},
+		calculateSubtotal: (state) => {
+			state.subtotal = state.cartItems.reduce(
+				(total, item) => total + item.price * item.quantity,
+				0
+			);
+		},
+		updateCartItems: (state, action: PayloadAction<CartProduct[]>) => {
+			state.cartItems = action.payload;
+		},
+		resetCheckout: () => initialState,
+	},
 });
 
-export const { updateCartItemQuantity, calculateSubtotal, resetCheckout } =
-  checkoutSlice.actions;
+export const {
+	updateCartItemQuantity,
+	calculateSubtotal,
+	updateCartItems,
+	resetCheckout,
+} = checkoutSlice.actions;
 
 export const selectCheckout = (state: RootState) => state.checkout;
 export const selectQuantity = (state: RootState) => state.checkout.cartItems;

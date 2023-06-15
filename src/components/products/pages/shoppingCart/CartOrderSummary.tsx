@@ -40,12 +40,8 @@ export const CartOrderSummary = () => {
 	const isNavbarFixed = useBreakpointValue({ base: false, lg: true });
 
 	const cartItems = useAppSelector(selectQuantity);
-	console.log(cartItems);
 
 	const subtotal = cartItems.reduce((total, item) => total + item.price, 0);
-	console.log(cartItems);
-
-	// console.log(subtotal);
 
 	const shippingAndTax = 40;
 	const total = subtotal + shippingAndTax;
