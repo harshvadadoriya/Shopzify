@@ -97,6 +97,7 @@ const WishlistItem = () => {
             my={2}
             mt={"2.5rem"}
             textAlign="center"
+            color={"teal"}
           >
             Your Wishlist Products
           </Text>

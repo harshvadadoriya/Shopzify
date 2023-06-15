@@ -4,6 +4,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { setLoggedOut } from "../../../redux/authSliceRedux/authSlice";
 import { store, useAppDispatch } from "../../../redux/store";
 import { api, useLogoutMutation } from "../../../redux/apiSliceRedux/apiSlice";
+import { resetCheckout } from "../../../redux/checkoutSliceRedux/checkoutSlice";
 
 const Logout = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ const Logout = () => {
     try {
       await logoutUser();
       dispatch(setLoggedOut());
+      dispatch(resetCheckout());
       store.dispatch(api.util.resetApiState());
       navigate("/login");
     } catch (error) {

@@ -27,6 +27,9 @@ const LazySignup = lazy(
 const LazySearchedProducts = lazy(
   () => import("./components/secondaryNavbar/SearchedProducts")
 );
+const LazyAddress = lazy(
+  () => import("./components/products/pages/shoppingCart/Address")
+);
 
 const ProtectedRoute = ({
   component: Component,
@@ -86,6 +89,14 @@ const mainRoutes = [
         element: (
           <Suspense fallback={<LazySuspense />}>
             <LazySearchedProducts />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/address",
+        element: (
+          <Suspense fallback={<LazySuspense />}>
+            <LazyAddress />
           </Suspense>
         ),
       },

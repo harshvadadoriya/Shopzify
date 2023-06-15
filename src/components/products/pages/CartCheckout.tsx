@@ -14,11 +14,18 @@ const CartCheckout = () => {
     <>
       <Box marginX={4} marginTop={isScreenFixed ? "8.3rem" : "0"}>
         <Center>
-          <Text fontWeight="bold" fontSize="3xl" my={2} mt={"2.5rem"}>
+          <Text
+            fontWeight="bold"
+            fontSize="3xl"
+            my={2}
+            mt={"2.5rem"}
+            color="teal"
+          >
             Shopping Bag
           </Text>
         </Center>
-        {cartData?.cart.products.length === 0 ? (
+        {cartData?.cart.products.length === 0 ||
+        cartData?.cart.products.length === undefined ? (
           <Center flexDirection="column" mt={8}>
             <Text fontSize="lg" fontWeight="bold">
               Hey, it feels so light!

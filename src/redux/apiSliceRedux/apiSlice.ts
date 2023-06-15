@@ -8,7 +8,6 @@ import {
   RefreshCredentials,
   ProductFormValues,
   WishlistRecord,
-  WishlistProduct,
   CartRecord,
   AddToCartProduct,
 } from "../../interfaces/interface";
@@ -31,10 +30,11 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Wishlist", "Cart"],
+  tagTypes: ["Product", "Wishlist", "Cart"],
   endpoints: (builder) => ({
     getProductData: builder.query<ProductResponse, void>({
       query: () => "/product",
+      providesTags: ["Product"],
     }),
     searchProducts: builder.query<ProductResponse, string>({
       query: (searchTerm) => `/product/search/${searchTerm}`,
