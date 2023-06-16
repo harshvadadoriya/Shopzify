@@ -3,7 +3,6 @@ import {
   Box,
   Flex,
   Icon,
-  Link,
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";

@@ -34,7 +34,7 @@ export interface ProductFormValues {
 	_id: string;
 	image: string;
 	name: string;
-	discountedPrice: string;
+	discountedPrice: number;
 	originalPrice: string;
 	description: string;
 	quantity: string;
@@ -97,7 +97,7 @@ export interface WishlistProduct {
 	productId: string;
 	category: string;
 	description: string;
-	discountedPrice: string;
+	discountedPrice: number;
 	displaySection: string;
 	gender: string;
 	image: string;
@@ -121,7 +121,7 @@ export interface AddToCartProduct {
 	_id: string;
 	image: string;
 	name: string;
-	discountedPrice: string;
+	discountedPrice: number;
 	productId?: string;
 	originalPrice: string;
 	description: string;
@@ -144,7 +144,7 @@ export interface CartRecord {
 export interface CartProducts {
 	image: string;
 	name: string;
-	discountedPrice: string;
+	discountedPrice: number;
 	productId: string;
 	cartQty: number;
 	category: string;
@@ -155,6 +155,8 @@ export interface CartProduct {
 	productId: string;
 	quantity: number;
 	price: number;
+	name: string;
+	image: string;
 }
 
 export interface CartItemProps {

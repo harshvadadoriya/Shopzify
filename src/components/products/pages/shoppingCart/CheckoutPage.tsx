@@ -14,9 +14,12 @@ import {
   useGetCartProductsQuery,
   useRemoveFromCartMutation,
 } from "../../../../redux/apiSliceRedux/apiSlice";
+import { useAppDispatch } from "../../../../redux/store";
+import { removeCart } from "../../../../redux/checkoutSliceRedux/checkoutSlice";
 
 const CheckoutPage = () => {
   const { data: cartData } = useGetCartProductsQuery();
+  const dispatch = useAppDispatch();
 
   const [removeFromCart] = useRemoveFromCartMutation();
   const toast = useToast();
@@ -39,6 +42,7 @@ const CheckoutPage = () => {
               duration: 2000,
               isClosable: true,
             });
+            dispatch(removeCart(productId));
           });
       } catch (error) {
         toast({

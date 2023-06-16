@@ -75,7 +75,7 @@ const SecondaryNavbar = () => {
               </MenuButton>
             </Menu>
           </NavLink>
-          <Menu>
+          {/* <Menu>
             <MenuButton
               boxSize={10}
               borderRadius={5}
@@ -89,7 +89,7 @@ const SecondaryNavbar = () => {
             >
               <FaUser className="ml-[0.7rem]" />
             </MenuButton>
-          </Menu>
+          </Menu> */}
         </Flex>
       </Flex>
     </Box>

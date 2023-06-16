@@ -1,8 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-	useAddToCartMutation,
-	useRemoveFromCartMutation,
-} from '../apiSliceRedux/apiSlice';
 import { RootState } from '../store';
 import { CheckoutState, CartProduct } from '../../interfaces/interface';
 
@@ -15,23 +11,26 @@ const checkoutSlice = createSlice({
 	name: 'checkout',
 	initialState,
 	reducers: {
-		updateCartItemQuantity: (
-			state,
-			action: PayloadAction<{
-				productId: string;
-				quantity: number;
-				price: number;
-			}>
-		) => {
-			const { productId, quantity, price } = action.payload;
+		addCart: (state, action: PayloadAction<CartProduct>) => {
+			state.cartItems.push(action.payload);
+		},
+		removeCart: (state, action: PayloadAction<string>) => {
+			state.cartItems = state.cartItems.filter(
+				(item) => item.productId !== action.payload
+			);
+		},
+		updateCartItemQuantity: (state, action: PayloadAction<CartProduct>) => {
+			const { productId, quantity, price, image, name } = action.payload;
 			const existingItem = state.cartItems.find(
 				(item) => item.productId === productId
 			);
 			if (existingItem) {
 				existingItem.quantity = quantity;
 				existingItem.price = price;
+				existingItem.image = image;
+				existingItem.name = name;
 			} else {
-				state.cartItems.push({ productId, quantity, price: 0 });
+				state.cartItems.push({ productId, quantity, price: 0, image, name });
 			}
 		},
 		calculateSubtotal: (state) => {
@@ -48,6 +47,8 @@ const checkoutSlice = createSlice({
 });
 
 export const {
+	addCart,
+	removeCart,
 	updateCartItemQuantity,
 	calculateSubtotal,
 	updateCartItems,
@@ -58,25 +59,3 @@ export const selectCheckout = (state: RootState) => state.checkout;
 export const selectQuantity = (state: RootState) => state.checkout.cartItems;
 
 export default checkoutSlice;
-
-// const checkoutSlice = createSlice({
-//   name: "checkout",
-//   initialState,
-//   reducers: {
-//     updateCartItemQuantity: (
-//       state,
-//       action: PayloadAction<{ productId: string; quantity: number }>
-//     ) => {
-//       const { productId, quantity } = action.payload;
-//       state.cartItems = state.cartItems.map((item) =>
-//         item.productId === productId ? { ...item, quantity } : item
-//       );
-//     },
-//     calculateSubtotal: (state) => {
-//       state.subtotal = state.cartItems.reduce(
-//         (total, item) => total + item.discountedPrice * item.quantity,
-//         0
-//       );
-//     },
-//   },
-// });

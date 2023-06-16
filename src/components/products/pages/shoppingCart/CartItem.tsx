@@ -23,14 +23,20 @@ const CartItem = (props: CartProducts) => {
 
 	const handleQuantityChange = (newQuantity: number) => {
 		setQuantity(newQuantity);
-		const price = parseInt(discountedPrice) * newQuantity;
+		const price = discountedPrice * newQuantity;
 
 		dispatch(
-			updateCartItemQuantity({ productId, quantity: newQuantity, price })
+			updateCartItemQuantity({
+				productId,
+				quantity: newQuantity,
+				price,
+				image,
+				name,
+			})
 		);
 	};
 
-	const totalPrice = parseInt(discountedPrice) * quantity;
+	const totalPrice = discountedPrice * quantity;
 
 	return (
 		<Flex

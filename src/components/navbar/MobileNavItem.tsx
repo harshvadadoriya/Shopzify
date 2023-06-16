@@ -12,7 +12,7 @@ import { NavItem } from "../../interfaces/interface";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { NavLink } from "react-router-dom";
 
-const MobileNavItem = ({ label, children, to }: NavItem) => {
+const MobileNavItem = ({ label, children }: NavItem) => {
   const { isOpen, onToggle } = useDisclosure();
 
   return (

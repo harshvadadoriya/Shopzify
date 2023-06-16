@@ -6,6 +6,7 @@ import {
 	Heading,
 	HStack,
 	Stack,
+	Image,
 	Text,
 	useBreakpointValue,
 	useColorModeValue,
@@ -15,11 +16,14 @@ import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Select } from '@chakra-ui/select';
 import { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAppSelector } from '../../../../redux/store';
+import { selectQuantity } from '../../../../redux/checkoutSliceRedux/checkoutSlice';
 
 const Address = () => {
 	const isScreenFixed = useBreakpointValue({ base: false, md: true });
 	const submitMenuBgColor = useColorModeValue('teal.400', 'teal.600');
+	const navigate = useNavigate();
 
 	const [shippingInfo, setShippingInfo] = useState({
 		firstName: '',
@@ -44,7 +48,44 @@ const Address = () => {
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		navigate('/payment');
 		console.log('Form submitted:', shippingInfo);
+	};
+
+	const cartItems = useAppSelector(selectQuantity);
+
+	const renderProductSummary = () => {
+		return cartItems.map((item) => (
+			<Box
+				borderWidth={1}
+				borderRadius="md"
+				p={2}
+				key={item.productId}
+				mb={2}
+				display="flex"
+				alignItems="center"
+			>
+				<Image src={item.image} boxSize={20} mr={2} />
+				<Box>
+					<Text fontSize="md" fontWeight="bold" mb={1}>
+						{item.name}
+					</Text>
+					<Text fontSize="sm" mb={1}>
+						Price: {item.price}
+					</Text>
+					<Text fontSize="sm" mb={1}>
+						Quantity: {item.quantity}
+					</Text>
+					<Text fontSize="sm" mb={1}>
+						Subtotal:{' '}
+						{`${(item.price * item.quantity).toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'INR',
+						})}`}
+					</Text>
+				</Box>
+			</Box>
+		));
 	};
 
 	return (
@@ -61,7 +102,7 @@ const Address = () => {
 				</Text>
 			</Center>
 			<Flex justify="center" py={10}>
-				<Box maxW="container.xl" w="full">
+				<Box justifyContent={'space-between'} w="6xl">
 					<Stack direction={['column', 'column', 'row']} spacing={8}>
 						<Box flex={1}>
 							<Heading mb={6}>Shipping Information</Heading>
@@ -148,38 +189,38 @@ const Address = () => {
 									<FormControl isRequired>
 										<FormLabel>Phone</FormLabel>
 										<Input
-											type="tel"
+											type="number"
 											name="phone"
 											value={shippingInfo.phone}
 											onChange={handleChange}
 										/>
 									</FormControl>
 								</VStack>
-								<NavLink to="/payment">
-									<Button
-										type="submit"
-										colorScheme="teal"
-										mt={4}
-										color="white"
-										bgColor={submitMenuBgColor}
-										_hover={{
-											bgColor: 'teal.500',
-										}}
-									>
-										Submit & Next
-									</Button>
-								</NavLink>
+
+								<Button
+									type="submit"
+									colorScheme="teal"
+									mt={4}
+									color="white"
+									bgColor={submitMenuBgColor}
+									_hover={{
+										bgColor: 'teal.500',
+									}}
+								>
+									Submit & Next
+								</Button>
 							</form>
 						</Box>
 
-						<Box flex={1}>
+						<Box flex={1} maxW="sm">
 							<Heading mb={6}>Order Summary</Heading>
-							<Box borderWidth={1} borderRadius="md" p={4}>
+							{renderProductSummary()}
+							{/* <Box borderWidth={1} borderRadius="md" p={4}>
 								<Text mb={4}>Product Name</Text>
 								<Text mb={4}>Price</Text>
 								<Text mb={4}>Quantity</Text>
 								<Text mb={4}>Subtotal</Text>
-							</Box>
+							</Box> */}
 						</Box>
 					</Stack>
 				</Box>
