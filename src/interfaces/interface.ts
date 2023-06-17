@@ -172,3 +172,16 @@ export interface CheckoutState {
 	cartItems: CartProduct[];
 	subtotal: number;
 }
+
+export interface AddressDetails {
+	_id?: string;
+	userId?: string;
+	firstName: string;
+	lastName: string;
+	address: string;
+	city: string;
+	country: string;
+	postalCode: string;
+	email: string;
+	phone: string;
+}

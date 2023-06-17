@@ -11,6 +11,7 @@ import {
 	useBreakpointValue,
 	useColorModeValue,
 	VStack,
+	useToast,
 } from '@chakra-ui/react';
 import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
@@ -19,11 +20,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../../../redux/store';
 import { selectQuantity } from '../../../../redux/checkoutSliceRedux/checkoutSlice';
+import { useAddAddressMutation } from '../../../../redux/apiSliceRedux/apiSlice';
 
 const Address = () => {
 	const isScreenFixed = useBreakpointValue({ base: false, md: true });
 	const submitMenuBgColor = useColorModeValue('teal.400', 'teal.600');
+	const [addAddress, { isLoading }] = useAddAddressMutation();
 	const navigate = useNavigate();
+	const toast = useToast();
 
 	const [shippingInfo, setShippingInfo] = useState({
 		firstName: '',
@@ -46,10 +50,31 @@ const Address = () => {
 		}));
 	};
 
-	const handleSubmit = (e: React.FormEvent) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		navigate('/payment');
-		console.log('Form submitted:', shippingInfo);
+		try {
+			await addAddress(shippingInfo)
+				.unwrap()
+				.then((response: any) => {
+					const message = response.message || 'Something wen wrong';
+					toast({
+						title: message,
+						position: 'top',
+						status: 'success',
+						duration: 3000,
+						isClosable: true,
+					});
+					navigate('/payment');
+				});
+		} catch (error) {
+			toast({
+				title: 'Error',
+				description: 'Something went wrong. Please try again.',
+				status: 'error',
+				duration: 3000,
+				isClosable: true,
+			});
+		}
 	};
 
 	const cartItems = useAppSelector(selectQuantity);
@@ -91,21 +116,17 @@ const Address = () => {
 	return (
 		<Box marginX={4} marginTop={isScreenFixed ? '8.3rem' : '0'}>
 			<Center>
-				<Text
-					fontWeight="bold"
-					fontSize="3xl"
-					my={2}
-					mt={'2.5rem'}
-					color="teal"
-				>
+				<Text fontWeight="bold" fontSize="3xl" mt={'2.5rem'} color="teal">
 					Shipment
 				</Text>
 			</Center>
-			<Flex justify="center" py={10}>
+			<Flex justify="center" py={isScreenFixed ? 10 : 0}>
 				<Box justifyContent={'space-between'} w="6xl">
 					<Stack direction={['column', 'column', 'row']} spacing={8}>
-						<Box flex={1}>
-							<Heading mb={6}>Shipping Information</Heading>
+						<Box flex={1} order={isScreenFixed ? 1 : 2}>
+							<Heading mb={6} mt={isScreenFixed ? 0 : 5}>
+								Shipping Information
+							</Heading>
 							<form onSubmit={handleSubmit}>
 								<VStack spacing={4}>
 									<HStack spacing={4} w="full">
@@ -212,7 +233,11 @@ const Address = () => {
 							</form>
 						</Box>
 
-						<Box flex={1} maxW="sm">
+						<Box
+							flex={1}
+							maxW={isScreenFixed ? 'sm' : 'full'}
+							order={isScreenFixed ? 2 : 1}
+						>
 							<Heading mb={6}>Order Summary</Heading>
 							{renderProductSummary()}
 							{/* <Box borderWidth={1} borderRadius="md" p={4}>
