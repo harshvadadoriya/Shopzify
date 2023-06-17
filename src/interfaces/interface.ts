@@ -68,7 +68,6 @@ export interface AuthState {
 // interfaces for authentication API responses
 export interface LoginResponse {
 	accessToken: string;
-	// userId: string;
 }
 
 export interface RefreshResponse {

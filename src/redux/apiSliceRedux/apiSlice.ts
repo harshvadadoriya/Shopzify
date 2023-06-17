@@ -13,25 +13,52 @@ import {
 	AddressDetails,
 } from '../../interfaces/interface';
 import { RootState } from '../store';
+import { setLoggedIn, setLoggedOut } from '../authSliceRedux/authSlice';
 
 const environment = import.meta.env;
 
-export const api = createApi({
+const baseQuery = fetchBaseQuery({
+	baseUrl: environment.VITE_API_BASE_URL,
+	credentials: 'include',
+	prepareHeaders: (headers, { getState }) => {
+		const token = (getState() as RootState).auth.accessToken;
+		if (token) {
+			headers.set('Content-type', 'application/json');
+			headers.set('Accept', 'application/json');
+			headers.set('authorization', `Bearer ${token}`);
+		}
+		return headers;
+	},
+});
+
+const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
+	let result = await baseQuery(args, api, extraOptions);
+	if (result?.error?.status === 401) {
+		// send refresh token to get new access token
+
+		const refreshResult = await baseQuery('/auth/refresh', api, extraOptions);
+		if (refreshResult?.data) {
+			// store the new token
+			const { accessToken } = refreshResult.data as LoginResponse;
+			api.dispatch(setLoggedIn(accessToken));
+			// retry the original query with new access token
+			result = await baseQuery(args, api, extraOptions);
+		} else {
+			api.dispatch(setLoggedOut());
+		}
+	}
+
+	return result;
+};
+
+const apiSlice = createApi({
 	reducerPath: 'api',
-	baseQuery: fetchBaseQuery({
-		baseUrl: environment.VITE_API_BASE_URL,
-		credentials: 'include',
-		prepareHeaders: (headers, { getState }) => {
-			const token = (getState() as RootState).auth.accessToken;
-			if (token) {
-				headers.set('Content-type', 'application/json');
-				headers.set('Accept', 'application/json');
-				headers.set('authorization', `Bearer ${token}`);
-			}
-			return headers;
-		},
-	}),
+	baseQuery: baseQueryWithReauth,
 	tagTypes: ['Product', 'Wishlist', 'Cart'],
+	endpoints: (builder) => ({}),
+});
+
+export const api = apiSlice.injectEndpoints({
 	endpoints: (builder) => ({
 		getProductData: builder.query<ProductResponse, void>({
 			query: () => '/product',

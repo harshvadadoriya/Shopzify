@@ -114,7 +114,7 @@ const Address = () => {
 	};
 
 	return (
-		<Box marginX={4} marginTop={isScreenFixed ? '8.3rem' : '0'}>
+		<Box marginX={8} marginTop={isScreenFixed ? '8.3rem' : '0'}>
 			<Center>
 				<Text fontWeight="bold" fontSize="3xl" mt={'2.5rem'} color="teal">
 					Shipment
