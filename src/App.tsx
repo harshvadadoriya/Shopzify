@@ -33,6 +33,9 @@ const LazyAddress = lazy(
 const LazyPayment = lazy(
 	() => import('./components/products/pages/shoppingCart/Payment')
 );
+const LazyPurchaseSuccess = lazy(
+	() => import('./components/products/pages/shoppingCart/PurchaseSuccess')
+);
 
 const ProtectedRoute = ({
 	component: Component,
@@ -108,6 +111,14 @@ const mainRoutes = [
 				element: (
 					<Suspense fallback={<LazySuspense />}>
 						<LazyPayment />
+					</Suspense>
+				),
+			},
+			{
+				path: '/success',
+				element: (
+					<Suspense fallback={<LazySuspense />}>
+						<LazyPurchaseSuccess />
 					</Suspense>
 				),
 			},

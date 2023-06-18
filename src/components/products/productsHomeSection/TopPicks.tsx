@@ -10,29 +10,32 @@ import {
 } from '@chakra-ui/react';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { sliderSettings } from '../../../utils/sliderSettings';
-import { FiChevronRight, FiChevronLeft } from 'react-icons/fi';
+import {
+	FiChevronRight as RightIcon,
+	FiChevronLeft as LeftIcon,
+} from 'react-icons/fi';
 import 'swiper/css';
 import { ProductFormValues } from '../../../interfaces/interface';
-import { useGetProductDataQuery } from '../../../redux/apiSliceRedux/apiSlice';
+import {
+	useGetProductDataQuery,
+	useGetWishlistsQuery,
+	useAddToWishlistMutation,
+} from '../../../redux/apiSliceRedux/apiSlice';
 import TextTransition from '../utils/TextTransition';
 import { useNavigate } from 'react-router-dom';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import '../utils/WishlistHeartAnimation.css';
-import {
-	useAddToWishlistMutation,
-	useGetWishlistsQuery,
-} from '../../../redux/apiSliceRedux/apiSlice';
 
 const SliderButtons = () => {
 	const swiper = useSwiper();
 	return (
 		<Flex position="absolute" top="4" right="0" zIndex={1}>
 			<Button onClick={() => swiper.slidePrev()}>
-				<FiChevronLeft />
+				<LeftIcon />
 			</Button>
 			<Button onClick={() => swiper.slideNext()} ml="2">
-				<FiChevronRight />
+				<RightIcon />
 			</Button>
 		</Flex>
 	);

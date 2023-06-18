@@ -15,10 +15,12 @@ import { FormControl, FormLabel } from '@chakra-ui/form-control';
 import { Input } from '@chakra-ui/input';
 import { Select } from '@chakra-ui/select';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Payment = () => {
 	const isScreenFixed = useBreakpointValue({ base: false, md: true });
 	const submitMenuBgColor = useColorModeValue('teal.400', 'teal.600');
+	const navigate = useNavigate();
 
 	const [paymentInfo, setPaymentInfo] = useState({
 		cardName: '',
@@ -40,6 +42,7 @@ const Payment = () => {
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		console.log('Form submitted:', paymentInfo);
+		navigate('/success');
 	};
 
 	return (
