@@ -4,7 +4,6 @@ import { CheckoutState, CartProduct } from '../../interfaces/interface';
 
 const initialState: CheckoutState = {
 	cartItems: [],
-	subtotal: 0,
 };
 
 const checkoutSlice = createSlice({
@@ -20,24 +19,27 @@ const checkoutSlice = createSlice({
 			);
 		},
 		updateCartItemQuantity: (state, action: PayloadAction<CartProduct>) => {
-			const { productId, quantity, price, image, name } = action.payload;
+			const { productId, quantity, discountedPrice, price, image, name } =
+				action.payload;
 			const existingItem = state.cartItems.find(
 				(item) => item.productId === productId
 			);
 			if (existingItem) {
 				existingItem.quantity = quantity;
 				existingItem.price = price;
+				existingItem.discountedPrice = discountedPrice;
 				existingItem.image = image;
 				existingItem.name = name;
 			} else {
-				state.cartItems.push({ productId, quantity, price: 0, image, name });
+				state.cartItems.push({
+					productId,
+					quantity,
+					discountedPrice,
+					price: 0,
+					image,
+					name,
+				});
 			}
-		},
-		calculateSubtotal: (state) => {
-			state.subtotal = state.cartItems.reduce(
-				(total, item) => total + item.price * item.quantity,
-				0
-			);
 		},
 		updateCartItems: (state, action: PayloadAction<CartProduct[]>) => {
 			state.cartItems = action.payload;
@@ -50,7 +52,6 @@ export const {
 	addCart,
 	removeCart,
 	updateCartItemQuantity,
-	calculateSubtotal,
 	updateCartItems,
 	resetCheckout,
 } = checkoutSlice.actions;

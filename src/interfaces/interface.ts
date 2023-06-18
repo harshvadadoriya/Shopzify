@@ -153,6 +153,7 @@ export interface CartProducts {
 export interface CartProduct {
 	productId: string;
 	quantity: number;
+	discountedPrice: number;
 	price: number;
 	name: string;
 	image: string;
@@ -169,7 +170,6 @@ export interface CartItemProps {
 
 export interface CheckoutState {
 	cartItems: CartProduct[];
-	subtotal: number;
 }
 
 export interface AddressDetails {

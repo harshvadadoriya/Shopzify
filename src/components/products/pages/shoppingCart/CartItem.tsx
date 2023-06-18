@@ -29,6 +29,7 @@ const CartItem = (props: CartProducts) => {
 			updateCartItemQuantity({
 				productId,
 				quantity: newQuantity,
+				discountedPrice,
 				price,
 				image,
 				name,

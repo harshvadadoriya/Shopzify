@@ -96,14 +96,18 @@ const Address = () => {
 						{item.name}
 					</Text>
 					<Text fontSize="sm" mb={1}>
-						Price: {item.price}
+						Price:{' '}
+						{`${item.discountedPrice.toLocaleString('en-US', {
+							style: 'currency',
+							currency: 'INR',
+						})}`}
 					</Text>
 					<Text fontSize="sm" mb={1}>
 						Quantity: {item.quantity}
 					</Text>
 					<Text fontSize="sm" mb={1}>
 						Subtotal:{' '}
-						{`${(item.price * item.quantity).toLocaleString('en-US', {
+						{`${item.price.toLocaleString('en-US', {
 							style: 'currency',
 							currency: 'INR',
 						})}`}

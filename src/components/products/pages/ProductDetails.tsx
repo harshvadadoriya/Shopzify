@@ -48,6 +48,7 @@ const ProductDetails = () => {
 		const cartProduct = {
 			productId: _id,
 			quantity: 1,
+			discountedPrice: discountedPrice,
 			price: discountedPrice,
 			name: name,
 			image: image,
