@@ -71,7 +71,7 @@ const SearchProduct = () => {
 					bgColor={inputBg}
 					_focus={{ borderColor: 'transparent' }}
 					onChange={handleInputChange}
-					onKeyPress={handleKeyPress}
+					onKeyDown={handleKeyPress}
 				/>
 				<IconButton
 					aria-label="Search database"
