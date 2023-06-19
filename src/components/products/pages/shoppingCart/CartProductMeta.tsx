@@ -12,10 +12,11 @@ export type CartProductMetaProps = {
   name: string;
   image: string;
   category: string;
+  discountedPrice: number;
 };
 
 export const CartProductMeta = (props: CartProductMetaProps) => {
-  const { image, name, category } = props;
+  const { image, name, category, discountedPrice } = props;
   return (
     <Stack direction="row" spacing="5" width="full">
       <Image
@@ -32,8 +33,17 @@ export const CartProductMeta = (props: CartProductMetaProps) => {
         <Stack spacing="0.5">
           <Text fontSize={"lg"}>{name}</Text>
         </Stack>
-        <HStack spacing="1" my={"0.1rem"} color={mode("gray.600", "gray.400")}>
+        <HStack spacing="1" color={mode("gray.600", "gray.400")}>
           <Text fontSize="md">Category: {category}</Text>
+        </HStack>
+        <HStack spacing="1" color={mode("gray.600", "gray.400")}>
+          <Text fontSize="md">
+            Price:{" "}
+            {discountedPrice.toLocaleString("en-US", {
+              style: "currency",
+              currency: "INR",
+            })}
+          </Text>
         </HStack>
         <Badge variant="solid" colorScheme="teal" fontSize={"xs"}>
           #1 BEST SELLER

@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import {
   Badge,
   Box,
-  Button,
   Center,
   Flex,
+  Heading,
   Text,
   useBreakpointValue,
   useColorModeValue,
@@ -16,11 +16,8 @@ import {
   useGetWishlistsQuery,
 } from "../../../redux/apiSliceRedux/apiSlice";
 import { useNavigate } from "react-router-dom";
-import { FaHeart, FaRegHeart, FaTimes } from "react-icons/fa";
-import {
-  ProductFormValues,
-  WishlistProduct,
-} from "../../../interfaces/interface";
+import { FaHeart } from "react-icons/fa";
+import { WishlistProduct } from "../../../interfaces/interface";
 
 const WishlistItem = () => {
   const cardBorderColor = useColorModeValue("gray.200", "gray.600");
@@ -91,16 +88,9 @@ const WishlistItem = () => {
     <>
       <Box marginX={4} marginTop={isScreenFixed ? "8.3rem" : "0"}>
         <Center>
-          <Text
-            fontWeight="bold"
-            fontSize="3xl"
-            my={2}
-            mt={"2.5rem"}
-            textAlign="center"
-            color={"teal"}
-          >
+          <Heading my={2} mt={"2.5rem"} textAlign="center" color={"teal"}>
             Your Wishlist Products
-          </Text>
+          </Heading>
         </Center>
         {wishlistItems.length === 0 ? (
           <Center flexDirection="column" mt={8}>
