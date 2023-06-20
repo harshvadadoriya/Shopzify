@@ -1,3 +1,5 @@
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import {
   Box,
   Button,
@@ -11,14 +13,13 @@ import {
   useColorModeValue as mode,
   VStack,
 } from "@chakra-ui/react";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
-import { Select } from "@chakra-ui/select";
-import { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import CartSummary from "./CartSummary";
 import { useAppDispatch } from "../../../../redux/store";
 import { updateAddress } from "../../../../redux/checkoutSliceRedux/checkoutSlice";
+import { AddressDetails } from "../../../../interfaces/interface";
+import FormikControl from "../../../formik/FormikControl";
 
 const Address = () => {
   const isScreenFixed = useBreakpointValue({ base: false, md: true });
@@ -26,38 +27,53 @@ const Address = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [shippingInfo, setShippingInfo] = useState({
+  const initialValue: AddressDetails = {
     firstName: "",
     lastName: "",
     address: "",
     city: "",
     country: "",
+    state: "",
     postalCode: "",
     email: "",
-    phone: "",
+    phone: "+91 ",
+  };
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required("First Name is required"),
+    lastName: Yup.string().required("Last Name is required"),
+    address: Yup.string()
+      .matches(
+        /^[a-zA-Z\s]{15,}$/,
+        "Address must be at least 15 characters long"
+      )
+      .required("Address is required"),
+    country: Yup.string().required("Country name is required"),
+    state: Yup.string().required("State name is required"),
+    city: Yup.string().required("City name is required"),
+    postalCode: Yup.string()
+      .matches(/^\d{6}$/, "Postal Code must be 6 digits")
+      .required("Postal Code is required"),
+    email: Yup.string()
+      .email("Email is invalid")
+      .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "Email is invalid")
+      .required("Email is required"),
+    phone: Yup.string()
+      .matches(
+        /^(\+91[\s]?)?[0]?(91)?[789]\d{9}$/,
+        "Please enter valid indian phone number"
+      )
+      .required("Phone number is required"),
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setShippingInfo((prevShippingInfo) => ({
-      ...prevShippingInfo,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("Form Submitted:", shippingInfo);
-    dispatch(updateAddress(shippingInfo));
+  const onSubmit = async (values: AddressDetails) => {
+    dispatch(updateAddress(values));
     navigate("/payment");
   };
 
   return (
     <Box marginX={4} marginTop={isScreenFixed ? "10.2rem" : "2rem"}>
       <Center>
-        <Heading mt={"2.5rem"} color="teal" my={2}>
+        <Heading mt={"2.5rem"} className="text-teal-600" my={2}>
           Shipment
         </Heading>
       </Center>
@@ -73,110 +89,100 @@ const Address = () => {
               >
                 Shipping Information
               </Text>
-              <form onSubmit={handleSubmit}>
-                <VStack spacing={4}>
-                  <HStack spacing={4} w="full">
-                    <FormControl isRequired>
-                      <FormLabel>First Name</FormLabel>
-                      <Input
+              <Formik
+                initialValues={initialValue}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+              >
+                {(formik) => (
+                  <Form>
+                    <VStack spacing={4}>
+                      <HStack spacing={4} w="full">
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="First Name"
+                          name="firstName"
+                          placeholder="Enter your First Name"
+                        />
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Last Name"
+                          name="lastName"
+                          placeholder="Enter your Last Name"
+                        />
+                      </HStack>
+                      <FormikControl
+                        control="textarea"
                         type="text"
-                        name="firstName"
-                        value={shippingInfo.firstName}
-                        onChange={handleChange}
+                        label="Address"
+                        name="address"
+                        placeholder="Enter your Address"
                       />
-                    </FormControl>
-                    <FormControl isRequired>
-                      <FormLabel>Last Name</FormLabel>
-                      <Input
-                        type="text"
-                        name="lastName"
-                        value={shippingInfo.lastName}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                  </HStack>
-
-                  <FormControl isRequired>
-                    <FormLabel>Address</FormLabel>
-                    <Input
-                      type="text"
-                      name="address"
-                      value={shippingInfo.address}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-
-                  <HStack spacing={4} w="full">
-                    <FormControl isRequired>
-                      <FormLabel>City</FormLabel>
-                      <Input
-                        type="text"
-                        name="city"
-                        value={shippingInfo.city}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormControl isRequired>
-                      <FormLabel>Country</FormLabel>
-                      <Select
-                        name="country"
-                        value={shippingInfo.country}
-                        onChange={handleChange}
-                      >
-                        <option value="">Select Country</option>
-                        <option value="India">India</option>
-                        <option value="USA">USA</option>
-                        <option value="Canada">Canada</option>
-                        <option value="Mexico">Mexico</option>
-                      </Select>
-                    </FormControl>
-                  </HStack>
-
-                  <HStack spacing={4} w="full">
-                    <FormControl isRequired>
-                      <FormLabel>Postal Code</FormLabel>
-                      <Input
-                        type="text"
-                        name="postalCode"
-                        value={shippingInfo.postalCode}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormControl isRequired>
-                      <FormLabel>Email</FormLabel>
-                      <Input
-                        type="email"
-                        name="email"
-                        value={shippingInfo.email}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                  </HStack>
-
-                  <FormControl isRequired>
-                    <FormLabel>Phone</FormLabel>
-                    <Input
-                      type="number"
-                      name="phone"
-                      value={shippingInfo.phone}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </VStack>
-
-                <Button
-                  type="submit"
-                  colorScheme="teal"
-                  mt={4}
-                  color="white"
-                  bgColor={submitMenuBgColor}
-                  _hover={{
-                    bgColor: "teal.500",
-                  }}
-                >
-                  Submit & Next
-                </Button>
-              </form>
+                      <HStack spacing={4} w="full">
+                        <FormikControl
+                          control="input"
+                          label="Country"
+                          name="country"
+                          placeholder="Enter your Country"
+                        />
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="State"
+                          name="state"
+                          placeholder="Enter your State"
+                        />
+                      </HStack>
+                      <HStack spacing={4} w="full">
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="City"
+                          name="city"
+                          placeholder="Enter your City"
+                        />
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Postal Code"
+                          name="postalCode"
+                          placeholder="Enter your Postal Code"
+                        />
+                      </HStack>
+                      <HStack spacing={4} w="full">
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Email"
+                          name="email"
+                          placeholder="Enter your Email"
+                        />
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Phone Number"
+                          name="phone"
+                          placeholder="Enter your phone"
+                        />
+                      </HStack>
+                    </VStack>
+                    <Button
+                      type="submit"
+                      colorScheme="teal"
+                      mt={4}
+                      color="white"
+                      bgColor={submitMenuBgColor}
+                      _hover={{
+                        bgColor: "teal.500",
+                      }}
+                    >
+                      Submit & Next
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
             </Box>
 
             <Box

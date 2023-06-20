@@ -1,3 +1,5 @@
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import {
   Box,
   Button,
@@ -12,9 +14,6 @@ import {
   useToast,
   VStack,
 } from "@chakra-ui/react";
-import { FormControl, FormLabel } from "@chakra-ui/form-control";
-import { Input } from "@chakra-ui/input";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CartSummary from "./CartSummary";
 import { useCreateCheckoutMutation } from "../../../../redux/apiSliceRedux/apiSlice";
@@ -23,6 +22,8 @@ import {
   resetCheckout,
   selectCheckout,
 } from "../../../../redux/checkoutSliceRedux/checkoutSlice";
+import { cardDetails } from "../../../../interfaces/interface";
+import FormikControl from "../../../formik/FormikControl";
 
 const Payment = () => {
   const isScreenFixed = useBreakpointValue({ base: false, md: true });
@@ -35,38 +36,47 @@ const Payment = () => {
   const { cartItems, summary, address } = checkoutData;
   const dispatch = useAppDispatch();
 
-  const [paymentInfo, setPaymentInfo] = useState({
+  const initialValue: cardDetails = {
     cardName: "",
     cardNumber: "",
     expirationDate: "",
     cvv: "",
+  };
+  const validationSchema = Yup.object({
+    cardName: Yup.string()
+      .required("Cardholder name is required")
+      .matches(
+        /^[a-zA-Z\s]+$/,
+        "Cardholder name must contain only letters and spaces"
+      ),
+    cardNumber: Yup.string()
+      .required("Card number is required")
+      .matches(/^\d{16}$/, "Card number must be a 16-digit number"),
+    expirationDate: Yup.string()
+      .required("Expiration date is required")
+      .matches(
+        /^(0[1-9]|1[0-2])\/\d{2}$/,
+        "Expiration date must be in the format MM/YY"
+      ),
+    cvv: Yup.string()
+      .required("CVV is required")
+      .matches(/^\d{3}$/, "CVV must be a 3-digit number"),
   });
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setPaymentInfo((prevPaymentInfo) => ({
-      ...prevPaymentInfo,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (values: cardDetails) => {
     const paymentData = {
       cartItems,
       summary,
       address,
-      payment: paymentInfo,
+      payment: values,
     };
     try {
       await createCheckout(paymentData)
         .unwrap()
         .then((response: any) => {
-          const message = response.message || "Something went wrong";
           toast({
-            title: message,
+            title: response.message || "Something went wrong",
+            description: response.subMessage || "Something went wrong",
             position: "top",
             status: "success",
             duration: 3000,
@@ -89,7 +99,7 @@ const Payment = () => {
   return (
     <Box marginX={4} marginTop={isScreenFixed ? "8.3rem" : "0"}>
       <Center>
-        <Heading my={2} mt={"2.5rem"} color="teal">
+        <Heading my={2} mt={"2.5rem"} className="text-teal-600">
           Payment Details
         </Heading>
       </Center>
@@ -105,62 +115,60 @@ const Payment = () => {
               >
                 Payment Information
               </Text>
-              <form onSubmit={handleSubmit}>
-                <VStack spacing={4}>
-                  <FormControl isRequired>
-                    <FormLabel>Cardholder Name</FormLabel>
-                    <Input
-                      type="text"
-                      name="cardName"
-                      value={paymentInfo.cardName}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-
-                  <HStack spacing={4} w="full">
-                    <FormControl isRequired>
-                      <FormLabel>Card Number</FormLabel>
-                      <Input
+              <Formik
+                initialValues={initialValue}
+                validationSchema={validationSchema}
+                onSubmit={onSubmit}
+              >
+                {(formik) => (
+                  <Form>
+                    <VStack spacing={4}>
+                      <FormikControl
+                        control="input"
                         type="text"
+                        label="Card Holder Name"
+                        name="cardName"
+                        placeholder="Enter your Name as per the Card"
+                      />
+                      <FormikControl
+                        control="input"
+                        type="text"
+                        label="Card Number"
                         name="cardNumber"
-                        value={paymentInfo.cardNumber}
-                        onChange={handleChange}
+                        placeholder="Enter your Card Number"
                       />
-                    </FormControl>
-                    <FormControl isRequired>
-                      <FormLabel>Expiration Date</FormLabel>
-                      <Input
-                        type="text"
-                        name="expirationDate"
-                        value={paymentInfo.expirationDate}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                  </HStack>
-
-                  <FormControl isRequired>
-                    <FormLabel>CVV</FormLabel>
-                    <Input
-                      type="text"
-                      name="cvv"
-                      value={paymentInfo.cvv}
-                      onChange={handleChange}
-                    />
-                  </FormControl>
-                </VStack>
-                <Button
-                  type="submit"
-                  colorScheme="teal"
-                  mt={4}
-                  color="white"
-                  bgColor={submitMenuBgColor}
-                  _hover={{
-                    bgColor: "teal.500",
-                  }}
-                >
-                  Submit & Next
-                </Button>
-              </form>
+                      <HStack spacing={4} w="full">
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="Expiration Date"
+                          name="expirationDate"
+                          placeholder="MM/YY"
+                        />
+                        <FormikControl
+                          control="input"
+                          type="text"
+                          label="CVV"
+                          name="cvv"
+                          placeholder="XXX"
+                        />
+                      </HStack>
+                    </VStack>
+                    <Button
+                      type="submit"
+                      colorScheme="teal"
+                      mt={4}
+                      color="white"
+                      bgColor={submitMenuBgColor}
+                      _hover={{
+                        bgColor: "teal.500",
+                      }}
+                    >
+                      Submit
+                    </Button>
+                  </Form>
+                )}
+              </Formik>
             </Box>
 
             <Box

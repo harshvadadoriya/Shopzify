@@ -21,7 +21,7 @@ const CartCheckout = () => {
     <>
       <Box marginX={4} marginTop={isScreenFixed ? "8.3rem" : "0"}>
         <Center>
-          <Heading my={2} mt={"2.5rem"} color="teal">
+          <Heading my={2} mt={"2.5rem"} className="text-teal-600">
             Shopping Bag
           </Heading>
         </Center>

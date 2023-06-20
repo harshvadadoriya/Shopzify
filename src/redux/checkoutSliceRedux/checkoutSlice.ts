@@ -27,6 +27,7 @@ const initialState: CheckoutState = {
     address: "",
     city: "",
     country: "",
+    state: "",
     postalCode: "",
     email: "",
     phone: "",
@@ -63,8 +64,14 @@ const checkoutSlice = createSlice({
       );
 
       if (!existingItem) {
-        state.cartItems.push(action.payload);
-        state.summary = calculateSummary(state.cartItems);
+        const existingItemWithId = state.cartItems.find(
+          (item) => item._id === action.payload._id
+        );
+
+        if (!existingItemWithId) {
+          state.cartItems.push(action.payload);
+          state.summary = calculateSummary(state.cartItems);
+        }
       }
     },
     removeCart: (state, action: PayloadAction<string>) => {

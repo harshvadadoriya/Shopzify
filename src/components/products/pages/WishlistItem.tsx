@@ -88,7 +88,12 @@ const WishlistItem = () => {
     <>
       <Box marginX={4} marginTop={isScreenFixed ? "8.3rem" : "0"}>
         <Center>
-          <Heading my={2} mt={"2.5rem"} textAlign="center" color={"teal"}>
+          <Heading
+            my={2}
+            mt={"2.5rem"}
+            textAlign="center"
+            className="text-teal-600"
+          >
             Your Wishlist Products
           </Heading>
         </Center>
